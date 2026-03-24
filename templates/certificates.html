@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="section-title">Certificates</h2>
+
+    <div class="cert-grid">
+        {% for cert in certificates %}
+        <div class="cert-badge-card reveal">
+            <!-- Icon Box at Top Left -->
+            <div class="cert-badge-icon-box">
+                <i class="fas fa-award"></i>
+            </div>
+
+            <!-- Content -->
+            <h3 class="cert-badge-title">{{ cert.title }}</h3>
+            
+            <p class="cert-badge-issuer">
+                <i class="fas fa-building" style="font-size:0.8rem;"></i> {{ cert.issuer }}
+            </p>
+            
+            {% if cert.date %}
+            <div class="cert-date-pill">
+                <i class="fas fa-calendar-alt" style="font-size:0.8rem;"></i> {{ cert.date }}
+            </div>
+            {% endif %}
+            
+            {% if cert.link %}
+            <a href="{{ cert.link }}" target="_blank" class="btn cert-badge-btn" style="margin-top:20px;">
+                <i class="fas fa-external-link-alt" style="margin-right:6px;"></i>View
+            </a>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="cert-badge-card" style="grid-column: 1 / -1; align-items: center; text-align: center; padding: 60px;">
+            <div class="cert-badge-icon-box" style="margin: 0 auto 20px;">
+                <i class="fas fa-award"></i>
+            </div>
+            <h3 class="cert-badge-title">No Certificates Available Yet</h3>
+            <p style="color: var(--text-secondary); margin-top: 10px;">Check back later to view my latest certifications and achievements.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('active'), i * 100);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+});
+</script>
+{% endblock %}

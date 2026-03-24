@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container hero">
+    <div class="hero-content">
+        <h1>Hi, I'm <span class="highlight">Harisudhan K</span></h1>
+        <h2>Computer Science Engineering Student <br> @ SNS Institutions</h2>
+        <p>Building Intelligent Web Systems through Internet of Things and Modern Web Technologies.</p>
+    </div>
+    <div class="profile-photo-container">
+        <!-- Replace the src below with your actual photo path, e.g., /static/images/profile.jpg -->
+        <img src="/static/photos/Hari.jpeg" alt="Harisudhan K" class="profile-photo">
+    </div>
+</div>
+
+<div class="container">
+    <div class="glass-card" style="text-align: left; margin: 0 auto 40px; max-width: 1000px;">
+        <p>I am a first-year engineering student specializing in Computer Science Engineering (Internet of Things) with hands-on experience in web development, API integration, and workflow automation. I enjoy learning new technologies and working in teams to build practical, real-world applications.</p>
+        
+        <div style="margin-top: 30px;">
+            <h3 class="highlight">Featured Project: MedClinic AI</h3>
+            <p>A web application that helps users recover from health issues using AI-based suggestions.</p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3 class="highlight">Skills Preview</h3>
+            <div class="tech-stack" style="margin-top: 10px;">
+                <span class="tech-tag">Web Development</span>
+                <span class="tech-tag">API Integration</span>
+                <span class="tech-tag">MongoDB</span>
+                <span class="tech-tag">n8n Automation</span>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <h3 class="highlight">Academic Highlights</h3>
+            <ul>
+                <li>B.E. CSE (IoT), SNS Institutions</li>
+                <li>HSLC: 88%</li>
+                <li>SSLC: 78.4%</li>
+            </ul>
+        </div>
+
+        <a href="/projects" class="btn btn-primary" style="margin-top: 30px;">View My Work</a>
+        <a href="/contact" class="btn" style="margin-top: 30px;">Get In Touch</a>
+    </div>
+</div>
+{% endblock %}

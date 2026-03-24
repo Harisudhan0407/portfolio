@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="section-title">Projects</h2>
+    
+    <div style="display: flex; flex-direction: column; gap: 30px;">
+        {% if projects %}
+            {% for project in projects %}
+            <div class="glass-card project-card">
+                <h3>{% if project.icon %}<i class="fas {{ project.icon }}" style="margin-right: 10px; color: var(--accent-color);"></i>{% endif %}{{ project.title }}</h3>
+                
+                <div class="project-details" style="margin-top: 20px;">
+                    <p style="white-space: pre-line; line-height: 1.6;">{{ project.description }}</p>
+
+                    <div class="tech-stack" style="margin-top: 25px;">
+                        {% for tag in project.tags.split(',') %}
+                        <span class="tech-tag">{{ tag.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div style="margin-top: 25px; display: flex; gap: 15px;">
+                        {% if project.github_url and project.github_url != '#' %}
+                        <a href="{{ project.github_url }}" target="_blank" class="btn" style="padding: 8px 15px; font-size: 0.9rem;"><i class="fab fa-github"></i> View Code</a>
+                        {% endif %}
+                        {% if project.live_url %}
+                        <a href="{{ project.live_url }}" target="_blank" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.9rem;"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="glass-card" style="text-align: center; padding: 50px;">
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">No projects added yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

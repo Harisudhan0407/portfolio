@@ -1,0 +1,861 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 30px;
+    }
+    .admin-title {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .admin-title h2 {
+        font-size: 2.5rem;
+        color: var(--accent-color);
+        margin: 0;
+    }
+    .admin-subtitle {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+    .logout-btn {
+        background: transparent;
+        color: #ff4c4c;
+        border: 1px solid #ff4c4c;
+        padding: 5px 15px;
+        border-radius: 5px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.3s;
+    }
+    .logout-btn:hover {
+        background: rgba(255, 76, 76, 0.1);
+        color: #ff4c4c;
+    }
+
+    /* Summary Cards */
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+    .summary-card {
+        background: #0B192C; /* slightly darker but matches */
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 25px 20px;
+        text-align: center;
+        transition: 0.3s;
+    }
+    .summary-card:hover {
+        border-color: rgba(255, 215, 0, 0.2);
+    }
+    .summary-card .number {
+        font-size: 2.5rem;
+        color: var(--accent-color);
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 10px;
+    }
+    .summary-card .label {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        color: #fff;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    /* Tabs */
+    .admin-tabs {
+        display: flex;
+        gap: 30px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 30px;
+    }
+    .tab-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 10px 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 2px solid transparent;
+        transition: 0.3s;
+    }
+    .tab-btn.active {
+        color: var(--accent-color);
+        border-bottom-color: var(--accent-color);
+    }
+
+    /* Tab Content */
+    .tab-pane {
+        display: none;
+    }
+    .tab-pane.active {
+        display: block;
+        animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Custom Forms */
+    .admin-form-panel {
+        background: #0A192F; /* matching background */
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    .admin-form-panel h3 {
+        color: var(--accent-color);
+        margin-bottom: 25px;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .form-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .form-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .form-col label {
+        font-size: 0.75rem;
+        color: var(--accent-color);
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+    }
+    .admin-input {
+        background: #112240;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        padding: 12px 15px;
+        color: #fff;
+        font-family: inherit;
+        font-size: 0.9rem;
+    }
+    .admin-input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+    }
+    .admin-btn {
+        background: var(--accent-color);
+        color: #0A192F;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-width: 150px;
+    }
+
+    /* Tables & Lists */
+    .admin-list-panel {
+        background: #0A192F;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 30px;
+    }
+    .admin-list-panel h3 {
+        color: var(--accent-color);
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 15px;
+    }
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .admin-table th {
+        text-align: left;
+        color: var(--accent-color);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 12px 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .admin-table td {
+        padding: 15px 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 0.9rem;
+    }
+    .action-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 5px;
+    }
+    .action-btn.delete {
+        color: #ff4c4c;
+    }
+    .action-btn.delete:hover {
+        background: rgba(255, 76, 76, 0.1);
+    }
+    .action-btn.edit {
+        color: #3498db;
+    }
+    .action-btn.edit:hover {
+        background: rgba(52, 152, 219, 0.1);
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(10, 25, 47, 0.95);
+        backdrop-filter: blur(10px);
+    }
+    .modal-content {
+        background-color: #0A192F;
+        margin: 10vh auto;
+        padding: 40px;
+        border: 1px solid var(--accent-color);
+        width: 90%;
+        max-width: 600px;
+        border-radius: 12px;
+        position: relative;
+    }
+    .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: var(--text-secondary);
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container" style="max-width: 1200px;">
+    
+    <!-- HEADER -->
+    <div class="admin-header">
+        <div class="admin-title">
+            <i class="fas fa-palette" style="font-size: 2.2rem; color: var(--accent-color);"></i>
+            <div>
+                <h2>Admin Dashboard</h2>
+                <div class="admin-subtitle">Harisudhan K — Portfolio Manager</div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <a href="{{ url_for('home') }}" class="logout-btn" style="border-color: var(--accent-color); color: var(--accent-color);"><i class="fas fa-external-link-alt"></i> View Site</a>
+            <a href="{{ url_for('admin_logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <!-- SUMMARY CARDS -->
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="number">{{ counts.skills }}</div>
+            <div class="label"><i class="fas fa-code"></i> EXTRA SKILLS</div>
+        </div>
+        <div class="summary-card">
+            <div class="number">{{ counts.certificates }}</div>
+            <div class="label"><i class="fas fa-certificate"></i> CERTIFICATES</div>
+        </div>
+        <div class="summary-card">
+            <div class="number">{{ counts.projects }}</div>
+            <div class="label"><i class="fas fa-folder"></i> PROJECTS</div>
+        </div>
+        <div class="summary-card">
+            <div class="number">{{ counts.messages }}</div>
+            <div class="label"><i class="fas fa-envelope"></i> MESSAGES</div>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="admin-tabs">
+        <button class="tab-btn active" onclick="openTab('about')"><i class="fas fa-user-edit"></i> About Me</button>
+        <button class="tab-btn" onclick="openTab('skills')"><i class="fas fa-code"></i> Skills</button>
+        <button class="tab-btn" onclick="openTab('certificates')"><i class="fas fa-certificate"></i> Certificates</button>
+        <button class="tab-btn" onclick="openTab('projects')"><i class="fas fa-folder"></i> Projects</button>
+        <button class="tab-btn" onclick="openTab('messages')"><i class="fas fa-envelope"></i> Messages</button>
+    </div>
+
+    <!-- TAB CONTENTS -->
+    
+    <!-- ABOUT TAB -->
+    <div id="about" class="tab-pane active">
+        <div class="admin-form-panel">
+            <h3><i class="fas fa-user-edit"></i> Edit About Me Content</h3>
+            <form action="{{ url_for('admin_update_about_text') }}" method="POST">
+                <div class="form-col" style="margin-bottom: 20px;">
+                    <label>Personal Introduction</label>
+                    <textarea name="intro" class="admin-input" rows="5" required>{{ about.intro if about else '' }}</textarea>
+                </div>
+                <div class="form-col" style="margin-bottom: 20px;">
+                    <label>Career Vision</label>
+                    <textarea name="vision" class="admin-input" rows="5" required>{{ about.vision if about else '' }}</textarea>
+                </div>
+                <button type="submit" class="admin-btn"><i class="fas fa-save"></i> Save Text Content</button>
+            </form>
+        </div>
+        
+        <div class="admin-form-panel">
+            <h3><i class="fas fa-graduation-cap"></i> Add Academic Entry</h3>
+            <form action="{{ url_for('admin_add_academic') }}" method="POST">
+                <div class="form-row">
+                    <div class="form-col" style="flex: 2;">
+                        <label>Degree / Qualification *</label>
+                        <input type="text" name="degree" class="admin-input" placeholder="e.g. B.E. Computer Science" required>
+                    </div>
+                    <div class="form-col" style="flex: 2;">
+                        <label>Institution *</label>
+                        <input type="text" name="institution" class="admin-input" placeholder="e.g. SNS Institutions" required>
+                    </div>
+                    <div class="form-col" style="flex: 1;">
+                        <label>Period</label>
+                        <input type="text" name="period" class="admin-input" placeholder="e.g. 2025–2026">
+                    </div>
+                </div>
+                <div class="form-col" style="margin-bottom: 20px;">
+                    <label>Details / Score</label>
+                    <textarea name="details" class="admin-input" rows="2" placeholder="e.g. Completed with 88%..."></textarea>
+                </div>
+                <button type="submit" class="admin-btn"><i class="fas fa-plus"></i> Add Academic Entry</button>
+            </form>
+        </div>
+
+        <div class="admin-list-panel">
+            <h3><i class="fas fa-list"></i> Academic Background</h3>
+            <table class="admin-table">
+                <tr>
+                    <th>Degree</th>
+                    <th>Institution</th>
+                    <th>Period</th>
+                    <th>Action</th>
+                </tr>
+                {% if about and about.academic %}
+                {% for edu in about.academic %}
+                <tr>
+                    <td>{{ edu.degree }}</td>
+                    <td>{{ edu.institution }}</td>
+                    <td>{{ edu.period or '—' }}</td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <button 
+                                type="button"
+                                class="action-btn edit-acad-btn" 
+                                data-id="{{ edu._id }}" 
+                                data-degree="{{ edu.degree|forceescape }}" 
+                                data-institution="{{ edu.institution|forceescape }}" 
+                                data-period="{{ edu.period or '' }}" 
+                                data-details="{{ edu.details|forceescape }}"
+                            ><i class="fas fa-edit"></i></button>
+                            <form action="{{ url_for('admin_delete_academic', acad_id=edu._id) }}" method="POST" style="margin:0;">
+                                <button type="submit" class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="4" style="color: var(--text-secondary); text-align: center;">No academic entries found.</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+
+    <!-- SKILLS TAB -->
+    <div id="skills" class="tab-pane">
+        <!-- Add Skill Form -->
+        <div class="admin-form-panel">
+            <h3><i class="fas fa-plus-circle"></i> Add New Skill</h3>
+            <form action="{{ url_for('admin_add_skill') }}" method="POST">
+                <div class="form-row">
+                    <div class="form-col" style="flex: 2;">
+                        <label>Skill Name *</label>
+                        <input type="text" name="name" class="admin-input" placeholder="e.g. React, Docker, TypeScript" required>
+                    </div>
+                    <div class="form-col" style="flex: 1;">
+                        <label>Category *</label>
+                        <select name="category" class="admin-input" required>
+                            <option value="Technical">Technical</option>
+                            <option value="Soft">Soft Skill</option>
+                        </select>
+                    </div>
+                    <div class="form-col" style="flex: 1;">
+                        <label>Proficiency (0-100)</label>
+                        <input type="number" name="percentage" class="admin-input" placeholder="75" min="0" max="100" required>
+                    </div>
+                    <div class="form-col" style="flex: 1; justify-content: flex-end;">
+                        <button type="submit" class="admin-btn"><i class="fas fa-plus"></i> Add Skill</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- Skills List -->
+        <div class="admin-list-panel">
+            <h3><i class="fas fa-list"></i> Current Extra Skills ({{ counts.skills }})</h3>
+            <div style="color: #fff;">
+                {% if skills %}
+                <table class="admin-table">
+                    <tr>
+                        <th>Skill Name</th>
+                        <th>Category</th>
+                        <th>Proficiency</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for skill in skills %}
+                    <tr>
+                        <td>{{ skill.name }}</td>
+                        <td>{{ skill.category }}</td>
+                        <td>{{ skill.percentage }}%</td>
+                        <td>
+                            <div style="display: flex; gap: 8px;">
+                                <button 
+                                    type="button"
+                                    class="action-btn edit-skill-btn" 
+                                    data-id="{{ skill._id }}" 
+                                    data-name="{{ skill.name|forceescape }}" 
+                                    data-category="{{ skill.category }}" 
+                                    data-percentage="{{ skill.percentage }}"
+                                ><i class="fas fa-edit"></i></button>
+                                <form action="{{ url_for('admin_delete_skill', skill_id=skill._id) }}" method="POST" style="margin:0;">
+                                    <button type="submit" class="action-btn delete"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% else %}
+                <p style="color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-code"></i><br>No extra skills added yet. Use the form above to add your first skill!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- CERTIFICATES TAB -->
+    <div id="certificates" class="tab-pane">
+        <div class="admin-form-panel">
+            <h3><i class="fas fa-plus-circle"></i> Add New Certificate</h3>
+            <form action="{{ url_for('admin_add_certificate') }}" method="POST">
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>Certificate Title *</label>
+                        <input type="text" name="title" class="admin-input" placeholder="e.g. AWS Certified Developer" required>
+                    </div>
+                    <div class="form-col">
+                        <label>Issuing Organisation *</label>
+                        <input type="text" name="issuer" class="admin-input" placeholder="e.g. Amazon Web Services" required>
+                    </div>
+                    <div class="form-col">
+                        <label>Issue Date</label>
+                        <input type="text" name="date" class="admin-input" placeholder="e.g. Jan 2025">
+                    </div>
+                    <div class="form-col">
+                        <label>Credential URL</label>
+                        <input type="url" name="link" class="admin-input" placeholder="https://... (optional)">
+                    </div>
+                </div>
+
+                <div class="form-col" style="margin-bottom: 20px;">
+                    <label>Description (Optional)</label>
+                    <textarea name="description" class="admin-input" rows="3" placeholder="Brief description of what this certificate covers..."></textarea>
+                </div>
+                <button type="submit" class="admin-btn"><i class="fas fa-plus"></i> Add Certificate</button>
+            </form>
+        </div>
+        <div class="admin-list-panel">
+            <h3><i class="fas fa-list"></i> Current Certificates ({{ counts.certificates }})</h3>
+            <table class="admin-table">
+                <tr>
+                    <th>Title</th>
+                    <th>Issuer</th>
+                    <th>Date</th>
+                    <th>Credential</th>
+                    <th>Action</th>
+                </tr>
+                {% for cert in certificates %}
+                <tr>
+                    <td>{{ cert.title }}</td>
+                    <td>{{ cert.issuer }}</td>
+                    <td>{{ cert.date or '—' }}</td>
+                    <td>
+                        {% if cert.link %}
+                        <a href="{{ cert.link }}" style="color: var(--accent-color);" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                        {% else %}
+                        —
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <button 
+                                type="button"
+                                class="action-btn edit-cert-btn" 
+                                data-id="{{ cert._id }}" 
+                                data-title="{{ cert.title|forceescape }}" 
+                                data-issuer="{{ cert.issuer|forceescape }}" 
+                                data-date="{{ cert.date or '' }}" 
+                                data-link="{{ cert.link or '' }}" 
+                                data-desc="{{ (cert.description or '')|forceescape }}"
+                            ><i class="fas fa-edit"></i></button>
+                            <form action="{{ url_for('admin_delete_certificate', cert_id=cert._id) }}" method="POST" style="margin:0;">
+                                <button type="submit" class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="color: var(--text-secondary); text-align: center;">No certificates added yet.</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- PROJECTS TAB -->
+    <div id="projects" class="tab-pane">
+        <div class="admin-form-panel">
+            <h3><i class="fas fa-plus-circle"></i> Add New Project</h3>
+            <form action="{{ url_for('admin_add_project') }}" method="POST">
+                <div class="form-row">
+                    <div class="form-col" style="flex: 2;">
+                        <label>Project Title *</label>
+                        <input type="text" name="title" class="admin-input" placeholder="e.g. MedClinic AI" required>
+                    </div>
+                    <div class="form-col" style="flex: 1;">
+                        <label>Icon (Font Awesome Class)</label>
+                        <input type="text" name="icon" class="admin-input" placeholder="fa-code">
+                    </div>
+                    <div class="form-col" style="flex: 2;">
+                        <label>GitHub URL *</label>
+                        <input type="url" name="github_url" class="admin-input" placeholder="https://github.com/..." required>
+                    </div>
+                    <div class="form-col" style="flex: 2;">
+                        <label>Live Demo URL (Optional)</label>
+                        <input type="url" name="live_url" class="admin-input" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-col" style="margin-bottom: 20px;">
+                    <label>Tags (Comma-Separated) *</label>
+                    <input type="text" name="tags" class="admin-input" placeholder="e.g. Flask, Python, MongoDB, AI/ML" required>
+                </div>
+                <div class="form-col" style="margin-bottom: 20px;">
+                    <label>Description *</label>
+                    <textarea name="description" class="admin-input" rows="4" placeholder="Brief description of the project..." required></textarea>
+                </div>
+                <button type="submit" class="admin-btn"><i class="fas fa-plus"></i> Add Project</button>
+            </form>
+        </div>
+        <div class="admin-list-panel">
+            <h3><i class="fas fa-list"></i> Current Projects ({{ counts.projects }})</h3>
+            <table class="admin-table">
+                <tr>
+                    <th>Title</th>
+                    <th>Tags</th>
+                    <th>Links</th>
+                    <th>Action</th>
+                </tr>
+                {% for project in projects %}
+                <tr>
+                    <td>{% if project.icon %}<i class="fas {{ project.icon }}" style="margin-right:8px; color: var(--accent-color);"></i>{% endif %}{{ project.title }}</td>
+                    <td style="font-size: 0.8rem; color: var(--text-secondary);">{{ project.tags }}</td>
+                    <td>
+                        <a href="{{ project.github_url }}" style="color: #fff; margin-right: 10px;" target="_blank"><i class="fab fa-github"></i></a>
+                        {% if project.live_url %}
+                        <a href="{{ project.live_url }}" style="color: var(--accent-color);" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <button 
+                                type="button"
+                                class="action-btn edit-project-btn" 
+                                data-id="{{ project._id }}" 
+                                data-title="{{ project.title|forceescape }}" 
+                                data-icon="{{ project.icon or '' }}" 
+                                data-git="{{ project.github_url }}" 
+                                data-live="{{ project.live_url or '' }}" 
+                                data-tags="{{ project.tags|forceescape }}" 
+                                data-desc="{{ project.description|forceescape }}"
+                            ><i class="fas fa-edit"></i></button>
+                            <form action="{{ url_for('admin_delete_project', project_id=project._id) }}" method="POST" style="margin:0;">
+                                <button type="submit" class="action-btn delete"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="color: var(--text-secondary); text-align: center;">No projects added yet.</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- MESSAGES TAB -->
+    <div id="messages" class="tab-pane">
+        <div class="admin-list-panel">
+            <h3><i class="fas fa-envelope"></i> Inbox Messages ({{ counts.messages }})</h3>
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+                {% for msg in messages %}
+                <div style="background: #112240; padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <strong style="color: var(--accent-color);">{{ msg.name }} <span style="color: var(--text-secondary); font-weight: normal; font-size: 0.85rem;">&lt;{{ msg.email }}&gt;</span></strong>
+                        <span style="color: var(--text-secondary); font-size: 0.8rem;">{{ msg.date.strftime('%b %d, %Y %H:%M') if msg.date else 'Unknown' }}</span>
+                    </div>
+                    <p style="color: #fff; line-height: 1.5; font-size: 0.95rem;">{{ msg.message }}</p>
+                </div>
+                {% else %}
+                <p style="color: var(--text-secondary); text-align: center; padding: 30px;">No messages received yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT MODALS -->
+<div id="editSkillModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('editSkillModal')">&times;</span>
+        <h3 style="color: var(--accent-color); margin-bottom: 25px;"><i class="fas fa-edit"></i> Edit Skill</h3>
+        <form id="editSkillForm" method="POST">
+            <div class="form-col" style="margin-bottom: 15px;">
+                <label>Skill Name</label>
+                <input type="text" name="name" id="editSkillName" class="admin-input" required>
+            </div>
+            <div class="form-row">
+                <div class="form-col">
+                    <label>Category</label>
+                    <select name="category" id="editSkillCategory" class="admin-input" required>
+                        <option value="Technical">Technical</option>
+                        <option value="Soft">Soft Skill</option>
+                    </select>
+                </div>
+                <div class="form-col">
+                    <label>Proficiency (0-100)</label>
+                    <input type="number" name="percentage" id="editSkillPercentage" class="admin-input" min="0" max="100" required>
+                </div>
+            </div>
+            <div style="margin-top: 30px; text-align: right;">
+                <button type="submit" class="admin-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editCertModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('editCertModal')">&times;</span>
+        <h3 style="color: var(--accent-color); margin-bottom: 25px;"><i class="fas fa-edit"></i> Edit Certificate</h3>
+        <form id="editCertForm" method="POST">
+            <div class="form-row">
+                <div class="form-col">
+                    <label>Title</label>
+                    <input type="text" name="title" id="editCertTitle" class="admin-input" required>
+                </div>
+                <div class="form-col">
+                    <label>Issuer</label>
+                    <input type="text" name="issuer" id="editCertIssuer" class="admin-input" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col">
+                    <label>Date</label>
+                    <input type="text" name="date" id="editCertDate" class="admin-input">
+                </div>
+                <div class="form-col">
+                    <label>Credential URL</label>
+                    <input type="url" name="link" id="editCertLink" class="admin-input">
+                </div>
+            </div>
+
+            <div class="form-col" style="margin-top: 15px;">
+                <label>Description</label>
+                <textarea name="description" id="editCertDesc" class="admin-input" rows="3"></textarea>
+            </div>
+            <div style="margin-top: 30px; text-align: right;">
+                <button type="submit" class="admin-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editProjectModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <span class="close-modal" onclick="closeModal('editProjectModal')">&times;</span>
+        <h3 style="color: var(--accent-color); margin-bottom: 25px;"><i class="fas fa-edit"></i> Edit Project</h3>
+        <form id="editProjectForm" method="POST">
+            <div class="form-row">
+                <div class="form-col">
+                    <label>Title</label>
+                    <input type="text" name="title" id="editProjectTitle" class="admin-input" required>
+                </div>
+                <div class="form-col">
+                    <label>Icon Class</label>
+                    <input type="text" name="icon" id="editProjectIcon" class="admin-input">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col">
+                    <label>GitHub URL</label>
+                    <input type="url" name="github_url" id="editProjectGit" class="admin-input" required>
+                </div>
+                <div class="form-col">
+                    <label>Live URL</label>
+                    <input type="url" name="live_url" id="editProjectLive" class="admin-input">
+                </div>
+            </div>
+            <div class="form-col" style="margin-top: 15px;">
+                <label>Tags</label>
+                <input type="text" name="tags" id="editProjectTags" class="admin-input" required>
+            </div>
+            <div class="form-col" style="margin-top: 15px;">
+                <label>Description</label>
+                <textarea name="description" id="editProjectDesc" class="admin-input" rows="4" required></textarea>
+            </div>
+            <div style="margin-top: 30px; text-align: right;">
+                <button type="submit" class="admin-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="editAcadModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('editAcadModal')">&times;</span>
+        <h3 style="color: var(--accent-color); margin-bottom: 25px;"><i class="fas fa-edit"></i> Edit Academic Entry</h3>
+        <form id="editAcadForm" method="POST">
+            <div class="form-row">
+                <div class="form-col" style="flex: 2;">
+                    <label>Degree / Qualification</label>
+                    <input type="text" name="degree" id="editAcadDegree" class="admin-input" required>
+                </div>
+                <div class="form-col" style="flex: 2;">
+                    <label>Institution</label>
+                    <input type="text" name="institution" id="editAcadInstitution" class="admin-input" required>
+                </div>
+                <div class="form-col" style="flex: 1;">
+                    <label>Period</label>
+                    <input type="text" name="period" id="editAcadPeriod" class="admin-input">
+                </div>
+            </div>
+            <div class="form-col" style="margin-top: 15px;">
+                <label>Details / Score</label>
+                <textarea name="details" id="editAcadDetails" class="admin-input" rows="2"></textarea>
+            </div>
+            <div style="margin-top: 30px; text-align: right;">
+                <button type="submit" class="admin-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openTab(tabName) {
+    var panes = document.getElementsByClassName("tab-pane");
+    for (var i = 0; i < panes.length; i++) {
+        panes[i].classList.remove("active");
+    }
+    var btns = document.getElementsByClassName("tab-btn");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.remove("active");
+    }
+    document.getElementById(tabName).classList.add("active");
+    event.currentTarget.classList.add("active");
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+}
+
+// Listen for Edit Skill clicks
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.edit-skill-btn')) {
+        const btn = e.target.closest('.edit-skill-btn');
+        document.getElementById('editSkillForm').action = "/admin/skill/edit/" + btn.dataset.id;
+        document.getElementById('editSkillName').value = btn.dataset.name;
+        document.getElementById('editSkillCategory').value = btn.dataset.category;
+        document.getElementById('editSkillPercentage').value = btn.dataset.percentage;
+        document.getElementById('editSkillModal').style.display = "block";
+    }
+    
+    if (e.target.closest('.edit-cert-btn')) {
+        const btn = e.target.closest('.edit-cert-btn');
+        document.getElementById('editCertForm').action = "/admin/certificate/edit/" + btn.dataset.id;
+        document.getElementById('editCertTitle').value = btn.dataset.title;
+        document.getElementById('editCertIssuer').value = btn.dataset.issuer;
+        document.getElementById('editCertDate').value = btn.dataset.date;
+        document.getElementById('editCertLink').value = btn.dataset.link;
+        document.getElementById('editCertDesc').value = btn.dataset.desc;
+        document.getElementById('editCertModal').style.display = "block";
+    }
+    
+    if (e.target.closest('.edit-project-btn')) {
+        const btn = e.target.closest('.edit-project-btn');
+        document.getElementById('editProjectForm').action = "/admin/project/edit/" + btn.dataset.id;
+        document.getElementById('editProjectTitle').value = btn.dataset.title;
+        document.getElementById('editProjectIcon').value = btn.dataset.icon;
+        document.getElementById('editProjectGit').value = btn.dataset.git;
+        document.getElementById('editProjectLive').value = btn.dataset.live;
+        document.getElementById('editProjectTags').value = btn.dataset.tags;
+        document.getElementById('editProjectDesc').value = btn.dataset.desc;
+        document.getElementById('editProjectModal').style.display = "block";
+    }
+    
+    if (e.target.closest('.edit-acad-btn')) {
+        const btn = e.target.closest('.edit-acad-btn');
+        document.getElementById('editAcadForm').action = "/admin/about/academic/edit/" + btn.dataset.id;
+        document.getElementById('editAcadDegree').value = btn.dataset.degree;
+        document.getElementById('editAcadInstitution').value = btn.dataset.institution;
+        document.getElementById('editAcadPeriod').value = btn.dataset.period;
+        document.getElementById('editAcadDetails').value = btn.dataset.details;
+        document.getElementById('editAcadModal').style.display = "block";
+    }
+});
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    if (event.target.className === 'modal') {
+        event.target.style.display = "none";
+    }
+}
+</script>
+{% endblock %}

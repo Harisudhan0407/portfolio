@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container hero">
+    <h2 class="section-title">Admin Login</h2>
+    <div class="glass-card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+        <p style="margin-bottom: 20px; color: var(--text-secondary);">Restricted Access - Administrator Login Required</p>
+        <form action="{{ url_for('admin_login') }}" method="POST">
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Admin Password" required style="text-align: center;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Login to Dashboard</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

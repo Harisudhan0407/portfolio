@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container skills-page">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
+        <h2 class="section-title">Skills &amp; Proficiencies</h2>
+        {% if session.get("admin_logged_in") %}
+        <a href="{{ url_for('admin_dashboard') }}" class="btn" style="padding: 5px 15px; font-size: 0.8rem;">Manage Skills</a>
+        {% endif %}
+    </div>
+
+    <div class="skills-wrapper glass-card">
+
+        <!-- Technical Skills -->
+        <div class="skill-category">
+            <h3 class="skill-cat-title">Technical Skills</h3>
+            {% for skill in technical_skills %}
+            <div class="skill-item reveal">
+                <div class="skill-info">
+                    <span class="skill-name">{{ skill.name }}</span>
+                    <span class="skill-pct
+                        {% if skill.percentage >= 90 %} pct-high
+                        {% elif skill.percentage >= 75 %} pct-mid
+                        {% else %} pct-low
+                        {% endif %}">{{ skill.percentage }}%</span>
+                </div>
+                <div class="skill-bar-bg">
+                    <div class="skill-bar-fill" data-width="{{ skill.percentage }}%"></div>
+                </div>
+            </div>
+            {% else %}
+            <p style="color: var(--text-secondary); margin-top: 10px;">No technical skills yet. Add them from the Admin Dashboard.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Soft Skills -->
+        <div class="skill-category">
+            <h3 class="skill-cat-title">Soft Skills</h3>
+            {% for skill in soft_skills %}
+            <div class="skill-item reveal">
+                <div class="skill-info">
+                    <span class="skill-name">{{ skill.name }}</span>
+                    <span class="skill-pct
+                        {% if skill.percentage >= 90 %} pct-high
+                        {% elif skill.percentage >= 75 %} pct-mid
+                        {% else %} pct-low
+                        {% endif %}">{{ skill.percentage }}%</span>
+                </div>
+                <div class="skill-bar-bg">
+                    <div class="skill-bar-fill" data-width="{{ skill.percentage }}%"></div>
+                </div>
+            </div>
+            {% else %}
+            <p style="color: var(--text-secondary); margin-top: 10px;">No soft skills yet. Add them from the Admin Dashboard.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Animate skill bars on load using IntersectionObserver
+    document.addEventListener('DOMContentLoaded', () => {
+        const fills = document.querySelectorAll('.skill-bar-fill');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const fill = entry.target;
+                    const targetWidth = fill.getAttribute('data-width');
+                    setTimeout(() => {
+                        fill.style.width = targetWidth;
+                    }, 200);
+                    observer.unobserve(fill);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        fills.forEach(fill => observer.observe(fill));
+
+        // Reveal animation
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('active'), i * 80);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        reveals.forEach(el => revealObserver.observe(el));
+    });
+</script>
+{% endblock %}

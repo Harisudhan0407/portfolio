@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 60px;
+    }
+    .contact-card {
+        background: #112240; /* Deep navy */
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        text-decoration: none;
+        color: var(--text-primary);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        transition: 0.3s ease;
+    }
+    .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+        border-color: var(--accent-color);
+    }
+    .contact-card i {
+        font-size: 2rem;
+        color: var(--accent-color);
+    }
+    .contact-card h4 {
+        color: var(--accent-color);
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    .contact-card p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #fff;
+    }
+</style>
+
+<div class="container" style="max-width: 900px;">
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+        <p style="color: var(--text-secondary); font-size: 1.1rem;">Let's collaborate and build something amazing together</p>
+    </div>
+
+    <!-- 2x2 Contact Grid -->
+    <div class="contact-grid">
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=harisudhan072008@gmail.com" target="_blank" class="contact-card">
+            <i class="fas fa-envelope"></i>
+            <h4>Email</h4>
+            <p>harisudhan072008@gmail.com</p>
+        </a>
+        <a href="https://linkedin.com/in/harisudhan-k-" target="_blank" class="contact-card">
+            <i class="fab fa-linkedin"></i>
+            <h4>LinkedIn</h4>
+            <p>linkedin.com/in/harisudhan-k-</p>
+        </a>
+        <a href="https://github.com/Harisudhan0407" target="_blank" class="contact-card">
+            <i class="fab fa-github"></i>
+            <h4>GitHub</h4>
+            <p>github.com/Harisudhan0407</p>
+        </a>
+        <a href="https://wa.me/919443286016" target="_blank" class="contact-card">
+            <i class="fab fa-whatsapp"></i>
+            <h4>WhatsApp</h4>
+            <p>+91 94432 86016</p>
+        </a>
+    </div>
+
+</div>
+{% endblock %}

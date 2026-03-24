@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="section-title">About Me</h2>
+    
+    <div class="glass-card">
+        <h3 class="highlight">Personal Introduction</h3>
+        <p style="white-space: pre-line;">{{ about.intro if about else 'Please add your introduction from the Admin panel.' }}</p>
+
+        <h3 class="highlight" style="margin-top: 30px;">Academic Background</h3>
+        <div style="border-left: 2px solid var(--accent-color); padding-left: 20px; margin-top: 20px;">
+            {% if about and about.academic %}
+                {% for edu in about.academic %}
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color: #fff;">{{ edu.degree }}</h4>
+                    <p style="color: var(--accent-color); font-weight: 600; margin: 4px 0;">{{ edu.institution }}</p>
+                    {% if edu.period %}
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">{{ edu.period }}</p>
+                    {% endif %}
+                    {% if edu.details %}
+                    <p style="margin-top: 5px;">{{ edu.details|safe }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: var(--text-secondary);">No academic background data available.</p>
+            {% endif %}
+        </div>
+
+        <h3 class="highlight" style="margin-top: 40px;">Career Vision</h3>
+        <p style="white-space: pre-line;">{{ about.vision if about else 'Please add your vision from the Admin panel.' }}</p>
+    </div>
+</div>
+{% endblock %}
