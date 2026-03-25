@@ -34,12 +34,19 @@
 </head>
 <body>
     <nav class="navbar" id="navbar">
-        <div class="nav-content" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <div style="display: flex; align-items: center;">
-                <a href="/admin" style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--accent-color); font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-shield-alt" style="font-size: 1.3rem;"></i> Admin
+        <div class="nav-content">
+            <div class="nav-left">
+                <a href="/admin" class="admin-link">
+                    <i class="fas fa-shield-alt"></i> Admin
                 </a>
             </div>
+            
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About</a></li>
@@ -70,6 +77,23 @@
     </footer>
 
     <!-- Three.js could be used for advanced 3D but standard CSS animations are used for robust performance here -->
+    <script>
+        const menuToggle = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
