@@ -23,12 +23,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Navbar Scroll Effect
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
+        const isLight = document.body.classList.contains('light-mode');
         if (window.scrollY > 50) {
-            navbar.style.background = 'rgba(7, 13, 25, 0.95)';
+            navbar.style.background = isLight ? '#ffffff' : 'rgba(7, 13, 25, 0.98)';
+            navbar.style.boxShadow = isLight
+                ? '0 2px 20px rgba(139, 92, 246, 0.12)'
+                : '0 2px 20px rgba(0,0,0,0.4)';
             navbar.style.padding = '5px 5%';
             navbar.style.height = '70px';
         } else {
-            navbar.style.background = 'rgba(7, 13, 25, 0.85)';
+            navbar.style.background = isLight ? '#ffffff' : 'rgba(7, 13, 25, 0.85)';
+            navbar.style.boxShadow = isLight
+                ? '0 2px 16px rgba(139, 92, 246, 0.1)'
+                : 'none';
             navbar.style.padding = '0 5%';
             navbar.style.height = '80px';
         }

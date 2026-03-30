@@ -3,12 +3,12 @@
    ========================================================================== */
 :root {
     --bg-color-dark: #070D19;
-    --accent-color: #FFD700;
-    --accent-glow: rgba(255, 215, 0, 0.4);
+    --accent-color: #8B5CF6;
+    --accent-glow: rgba(139, 92, 246, 0.4);
     --text-primary: #E6F1FF;
     --text-secondary: #8892B0;
     --glass-bg: rgba(10, 25, 47, 0.4);
-    --glass-border: rgba(255, 215, 0, 0.15);
+    --glass-border: rgba(139, 92, 246, 0.15);
     --nav-height: 80px;
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -58,7 +58,7 @@ a:hover {
     position: absolute;
     width: 200%; height: 200%;
     top: -50%; left: -50%;
-    background-image: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.03) 0%, transparent 50%);
+    background-image: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
     animation: pulseBg 15s linear infinite;
 }
 
@@ -222,8 +222,8 @@ main {
 
 .glass-card:hover {
     transform: translateY(-8px);
-    border-color: rgba(255, 215, 0, 0.4);
-    box-shadow: 0 15px 45px rgba(255, 215, 0, 0.15);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 15px 45px rgba(139, 92, 246, 0.15);
 }
 
 /* Scroll Reveal Helper */
@@ -320,8 +320,8 @@ main {
     border-radius: 50%;
     border: 3px solid var(--accent-color);
     padding: 10px;
-    background: rgba(255, 215, 0, 0.05);
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+    background: rgba(139, 92, 246, 0.05);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
@@ -329,7 +329,7 @@ main {
 }
 .profile-photo-container:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 0 50px rgba(139, 92, 246, 0.3);
 }
 .profile-photo {
     width: 100%;
@@ -424,7 +424,7 @@ main {
     grid-template-columns: 1fr 1fr;
     gap: 50px;
     background: rgba(8, 18, 38, 0.75);
-    border: 1px solid rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.2);
     border-radius: 18px;
     padding: 40px;
     backdrop-filter: blur(20px);
@@ -435,7 +435,7 @@ main {
 .skills-wrapper:hover {
     transform: none;
     box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-    border-color: rgba(255, 215, 0, 0.2);
+    border-color: rgba(139, 92, 246, 0.2);
 }
 
 .skill-cat-title {
@@ -489,8 +489,8 @@ main {
     height: 100%;
     width: 0;
     border-radius: 50px;
-    background: linear-gradient(90deg, #c8a200 0%, var(--accent-color) 60%, #ffe566 100%);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    background: linear-gradient(90deg, #5B21B6 0%, var(--accent-color) 60%, #DDD6FE 100%);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
     transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -524,7 +524,7 @@ main {
     flex-wrap: wrap;
 }
 .tech-tag {
-    background: rgba(255, 215, 0, 0.1);
+    background: rgba(139, 92, 246, 0.1);
     color: var(--accent-color);
     padding: 5px 12px;
     border-radius: 15px;
@@ -556,7 +556,7 @@ main {
 }
 .contact-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
     border-color: var(--accent-color);
 }
 .contact-card i {
@@ -589,7 +589,7 @@ form { display: flex; flex-direction: column; gap: 20px; }
 .form-group input:focus, .form-group textarea:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
 }
 
 /* Certificates - Reference Style */
@@ -630,8 +630,8 @@ form { display: flex; flex-direction: column; gap: 20px; }
 .cert-badge-icon-box {
     width: 48px;
     height: 48px;
-    background: rgba(255, 215, 0, 0.08); /* faint gold background */
-    border: 1px solid rgba(255, 215, 0, 0.2);
+    background: rgba(139, 92, 246, 0.08); /* faint violet background */
+    border: 1px solid rgba(139, 92, 246, 0.2);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -710,3 +710,211 @@ footer {
     font-size: 1.5rem;
     margin: 0 10px;
 }
+
+/* ==========================================================================
+   Theme Toggle Button
+   ========================================================================== */
+.theme-toggle {
+    background: rgba(139, 92, 246, 0.12);
+    border: 1.5px solid rgba(139, 92, 246, 0.35);
+    color: var(--accent-color);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: var(--transition-smooth);
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+.theme-toggle:hover {
+    background: var(--accent-color);
+    color: #fff;
+    box-shadow: 0 0 18px var(--accent-glow);
+    transform: rotate(20deg) scale(1.1);
+}
+
+/* ==========================================================================
+   Light Mode Overrides
+   ========================================================================== */
+body.light-mode {
+    --bg-color-dark: #F5F3FF;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(139, 92, 246, 0.25);
+    --text-primary: #050F1A;
+    --text-secondary: #5E4E7A;
+    background-color: var(--bg-color-dark);
+    color: var(--text-primary);
+}
+
+body.light-mode .bg-animation {
+    background: radial-gradient(circle at 20% 30%, #F5F3FF 0%, #F5F3FF 100%);
+}
+
+body.light-mode .bg-animation::after {
+    background-image: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+}
+
+body.light-mode .shape-1 { opacity: 0.18; }
+body.light-mode .shape-2 { background: #DDD6FE; opacity: 0.15; }
+
+body.light-mode .navbar {
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    box-shadow: 0 2px 16px rgba(139, 92, 246, 0.1);
+}
+
+body.light-mode .logo {
+    color: #050F1A;
+}
+
+body.light-mode .admin-link {
+    color: var(--accent-color);
+}
+
+body.light-mode .admin-link:hover {
+    color: #5B21B6;
+    text-shadow: none;
+}
+
+body.light-mode .nav-links a {
+    color: #050F1A;
+}
+
+body.light-mode .nav-links a:hover {
+    color: var(--accent-color);
+}
+
+body.light-mode .nav-links {
+    background: rgba(255, 255, 255, 0.99);
+}
+
+body.light-mode .menu-toggle .bar {
+    background-color: #050F1A;
+}
+
+body.light-mode .glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    border-color: rgba(139, 92, 246, 0.2);
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.1);
+}
+
+body.light-mode .glass-card:hover {
+    box-shadow: 0 15px 45px rgba(139, 92, 246, 0.2);
+}
+
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4 {
+    color: #050F1A;
+}
+
+body.light-mode .hero h2 {
+    color: var(--text-secondary);
+}
+
+body.light-mode .profile-photo-container {
+    background: rgba(139, 92, 246, 0.07);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+}
+
+body.light-mode .skills-wrapper {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(139, 92, 246, 0.2);
+    box-shadow: 0 8px 40px rgba(139, 92, 246, 0.1);
+}
+
+body.light-mode .skill-name {
+    color: #050F1A;
+}
+
+body.light-mode .skill-bar-bg {
+    background: rgba(139, 92, 246, 0.12);
+}
+
+body.light-mode .contact-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(139, 92, 246, 0.15);
+}
+
+body.light-mode .contact-card p {
+    color: #050F1A;
+}
+
+body.light-mode .form-group input,
+body.light-mode .form-group textarea {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(139, 92, 246, 0.25);
+    color: #050F1A;
+}
+
+body.light-mode .cert-badge-card {
+    background: #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.1);
+}
+
+body.light-mode .cert-badge-icon-box {
+    background: rgba(139, 92, 246, 0.08);
+}
+
+body.light-mode footer {
+    border-top-color: rgba(139, 92, 246, 0.2);
+    color: var(--text-secondary);
+}
+
+body.light-mode .theme-toggle {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+body.light-mode a {
+    color: var(--accent-color);
+}
+
+body.light-mode a:hover {
+    color: #5B21B6;
+}
+
+/* Fix: button text invisible on light bg because --bg-color-dark becomes near-white */
+body.light-mode .btn-primary {
+    color: #ffffff;
+}
+
+body.light-mode .btn-primary:hover {
+    background: #5B21B6;
+    border-color: #5B21B6;
+    color: #ffffff;
+}
+
+body.light-mode .btn:hover {
+    color: #ffffff;
+}
+
+/* Fix: section title underline visible in light mode */
+body.light-mode .section-title {
+    color: #050F1A;
+}
+
+/* Fix: hero paragraph text in light mode */
+body.light-mode .hero p,
+body.light-mode .glass-card p,
+body.light-mode .glass-card li {
+    color: #1A2D3D;
+}
+
+/* Fix: tech tag text in light mode */
+body.light-mode .tech-tag {
+    background: rgba(139, 92, 246, 0.1);
+    color: #5B21B6;
+    border-color: #8B5CF6;
+}
+
+
+
