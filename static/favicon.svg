@@ -1,20 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <!-- Crown body - dark yellow/gold, transparent background -->
-  <path d="M8 46 L13 24 L24 37 L32 14 L40 37 L51 24 L56 46 Z"
-        fill="#B8860B"
-        stroke="#DAA520"
-        stroke-width="1.5"
-        stroke-linejoin="round"/>
+  <!-- White circle background -->
+  <circle cx="32" cy="32" r="30" fill="#ffffff"/>
 
-  <!-- Crown base bar -->
-  <rect x="8" y="46" width="48" height="7" rx="3.5"
-        fill="#8B6914"/>
-
-  <!-- Jewels on tips -->
-  <circle cx="13" cy="24" r="3.2" fill="#DAA520"/>
-  <circle cx="32" cy="14" r="4"   fill="#FFD700"/>
-  <circle cx="51" cy="24" r="3.2" fill="#DAA520"/>
-
-  <!-- Center base jewel -->
-  <circle cx="32" cy="49.5" r="3" fill="#DAA520"/>
+  <!-- HK text in dark violet -->
+  <text x="32" y="44"
+        font-family="Arial Black, Arial, sans-serif"
+        font-weight="900"
+        font-size="28"
+        fill="#4C1D95"
+        text-anchor="middle"
+        letter-spacing="-1">HK</text>
 </svg>
