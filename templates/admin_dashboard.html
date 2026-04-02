@@ -265,6 +265,14 @@
         font-size: 1.5rem;
         cursor: pointer;
     }
+    /* Message cards */
+    .msg-card {
+        background: #112240;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .msg-body {
+        color: #fff;
+    }
 </style>
 
 <div class="container" style="max-width: 1200px;">
@@ -637,12 +645,12 @@
             <h3><i class="fas fa-envelope"></i> Inbox Messages ({{ counts.messages }})</h3>
             <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
                 {% for msg in messages %}
-                <div style="background: #112240; padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <div class="msg-card" style="padding: 20px; border-radius: 8px;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                         <strong style="color: var(--accent-color);">{{ msg.name }} <span style="color: var(--text-secondary); font-weight: normal; font-size: 0.85rem;">&lt;{{ msg.email }}&gt;</span></strong>
                         <span style="color: var(--text-secondary); font-size: 0.8rem;">{{ msg.date.strftime('%b %d, %Y %H:%M') if msg.date else 'Unknown' }}</span>
                     </div>
-                    <p style="color: #fff; line-height: 1.5; font-size: 0.95rem;">{{ msg.message }}</p>
+                    <p class="msg-body" style="line-height: 1.5; font-size: 0.95rem;">{{ msg.message }}</p>
                 </div>
                 {% else %}
                 <p style="color: var(--text-secondary); text-align: center; padding: 30px;">No messages received yet.</p>

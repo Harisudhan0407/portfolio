@@ -916,5 +916,115 @@ body.light-mode .tech-tag {
     border-color: #8B5CF6;
 }
 
+/* ==========================================================================
+   Light Mode — Admin Dashboard Overrides
+   ========================================================================== */
+
+body.light-mode .admin-tabs {
+    border-bottom-color: rgba(139, 92, 246, 0.2);
+}
+body.light-mode .tab-btn {
+    color: #2D1B69;
+}
+body.light-mode .tab-btn.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+body.light-mode .tab-btn:hover {
+    color: var(--accent-color);
+}
+body.light-mode .summary-card {
+    background: #ffffff;
+    border-color: rgba(139, 92, 246, 0.2);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08);
+}
+body.light-mode .summary-card .label {
+    color: #2D1B69;
+}
+body.light-mode .admin-form-panel {
+    background: #ffffff;
+    border-color: rgba(139, 92, 246, 0.15);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.07);
+}
+body.light-mode .admin-form-panel h3 {
+    color: var(--accent-color);
+}
+body.light-mode .admin-list-panel {
+    background: #ffffff;
+    border-color: rgba(139, 92, 246, 0.15);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.07);
+}
+body.light-mode .admin-list-panel h3 {
+    color: var(--accent-color);
+    border-bottom-color: rgba(139, 92, 246, 0.15);
+}
+body.light-mode .admin-table th {
+    color: var(--accent-color);
+    border-bottom-color: rgba(139, 92, 246, 0.2);
+}
+body.light-mode .admin-table td {
+    color: #1A1035;
+    border-bottom-color: rgba(139, 92, 246, 0.08);
+}
+body.light-mode .admin-input {
+    background: #F5F3FF;
+    border-color: rgba(139, 92, 246, 0.25);
+    color: #1A1035;
+}
+body.light-mode .admin-input:focus {
+    border-color: var(--accent-color);
+    background: #ffffff;
+}
+body.light-mode .admin-input option {
+    background: #ffffff;
+    color: #1A1035;
+}
+body.light-mode .action-btn {
+    background: rgba(139, 92, 246, 0.07);
+    border-color: rgba(139, 92, 246, 0.2);
+    color: #2D1B69;
+}
+body.light-mode .action-btn.edit { color: #2980b9; }
+body.light-mode .action-btn.delete { color: #c0392b; }
+body.light-mode .action-btn.delete:hover { background: rgba(192, 57, 43, 0.1); }
+body.light-mode .action-btn.edit:hover { background: rgba(41, 128, 185, 0.1); }
+body.light-mode .admin-btn {
+    background: var(--accent-color);
+    color: #ffffff;
+}
+body.light-mode .logout-btn {
+    color: #c0392b;
+    border-color: #c0392b;
+}
+body.light-mode .modal {
+    background-color: rgba(245, 243, 255, 0.95);
+}
+body.light-mode .modal-content {
+    background: #ffffff;
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 40px rgba(139, 92, 246, 0.25);
+}
+body.light-mode .close-modal {
+    color: #5E4E7A;
+}
+body.light-mode .admin-subtitle {
+    color: #5E4E7A;
+}
+body.light-mode #photoDropZone {
+    border-color: rgba(139, 92, 246, 0.4) !important;
+    background: rgba(139, 92, 246, 0.04) !important;
+}
+body.light-mode #photoDropZone p {
+    color: #1A1035 !important;
+}
+body.light-mode .msg-card {
+    background: #F0EEFF;
+    border-color: rgba(139, 92, 246, 0.15);
+}
+body.light-mode .msg-body {
+    color: #1A1035;
+}
+
+
 
 
