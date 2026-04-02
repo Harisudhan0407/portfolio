@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<!-- Cropper.js -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 <style>
     .admin-header {
         display: flex;
@@ -661,66 +664,85 @@
 
     <!-- PROFILE PHOTO TAB -->
     <div id="photo" class="tab-pane">
-        <div class="admin-form-panel" style="max-width: 600px; margin: 0 auto;">
-            <h3><i class="fas fa-camera"></i> Update Profile Photo</h3>
+        <div class="admin-form-panel" style="max-width: 620px; margin: 0 auto;">
+            <h3><i class="fas fa-camera-retro"></i> Update Profile Photo</h3>
 
-            <!-- Current Photo Preview -->
-            <div style="text-align: center; margin-bottom: 30px;">
-                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Current Photo</p>
-                <img 
-                    id="currentPhotoPreview"
-                    src="{{ photo_url }}"
-                    alt="Profile Photo"
-                    style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
-                           border: 3px solid var(--accent-color); box-shadow: 0 0 25px rgba(255,215,0,0.2);"
-                >
+            <!-- Current Photo -->
+            <div style="text-align: center; margin-bottom: 28px;">
+                <p style="color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Current Photo</p>
+                <img id="currentPhotoPreview" src="{{ photo_url }}" alt="Profile"
+                    style="width:150px;height:150px;border-radius:50%;object-fit:cover;
+                           border:3px solid var(--accent-color);box-shadow:0 0 25px rgba(139,92,246,0.25);">
             </div>
 
-            <!-- Upload Form -->
-            <form action="{{ url_for('admin_upload_photo') }}" method="POST" enctype="multipart/form-data">
-                <!-- Drop Zone -->
-                <div 
-                    id="photoDropZone"
-                    onclick="document.getElementById('photoFileInput').click()"
-                    style="border: 2px dashed rgba(255,215,0,0.4); border-radius: 12px; padding: 40px 20px;
-                           text-align: center; cursor: pointer; transition: 0.3s; margin-bottom: 20px;
-                           background: rgba(255,215,0,0.03);"
-                    ondragover="event.preventDefault(); this.style.borderColor='var(--accent-color)';"
-                    ondragleave="this.style.borderColor='rgba(255,215,0,0.4)';"
-                    ondrop="handlePhotoDrop(event)"
-                >
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 12px;"></i>
-                    <p style="color: #fff; margin: 0; font-size: 1rem;">Click or drag & drop a photo here</p>
-                    <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px;">PNG, JPG, JPEG, GIF, WEBP — Max 5MB</p>
-                </div>
+            <!-- Drop Zone -->
+            <div id="photoDropZone"
+                onclick="document.getElementById('photoFileInput').click()"
+                ondragover="event.preventDefault(); this.style.borderColor='var(--accent-color)';"
+                ondragleave="this.style.borderColor='rgba(139,92,246,0.35)';"
+                ondrop="handlePhotoDrop(event)"
+                style="border:2px dashed rgba(139,92,246,0.35);border-radius:12px;padding:40px 20px;
+                       text-align:center;cursor:pointer;transition:0.3s;margin-bottom:20px;
+                       background:rgba(139,92,246,0.04);">
+                <i class="fas fa-cloud-upload-alt" style="font-size:2.5rem;color:var(--accent-color);display:block;margin-bottom:10px;"></i>
+                <p style="margin:0;font-size:1rem;">Click or drag &amp; drop a photo here</p>
+                <p style="color:var(--text-secondary);font-size:0.8rem;margin-top:6px;">PNG, JPG, JPEG, WEBP &mdash; Max 5 MB</p>
+            </div>
+            <input type="file" id="photoFileInput" accept="image/png,image/jpeg,image/webp" style="display:none;" onchange="openCropper(this)">
 
-                <input 
-                    type="file" 
-                    name="photo" 
-                    id="photoFileInput" 
-                    accept="image/png,image/jpeg,image/gif,image/webp"
-                    style="display: none;"
-                    onchange="previewPhoto(this)"
-                    required
-                >
+            <!-- Status message -->
+            <div id="uploadStatus" style="display:none;text-align:center;margin-top:16px;"></div>
+        </div>
+    </div>
+</div>
 
-                <!-- New Photo Preview (appears after selection) -->
-                <div id="newPhotoPreviewWrapper" style="display:none; text-align:center; margin-bottom:20px;">
-                    <p style="color: var(--accent-color); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">New Photo Preview</p>
-                    <img 
-                        id="newPhotoPreview"
-                        src=""
-                        alt="New Photo"
-                        style="width:140px; height:140px; border-radius:50%; object-fit:cover;
-                               border: 3px solid #3498db; box-shadow: 0 0 20px rgba(52,152,219,0.3);"
-                    >
-                    <p id="selectedFileName" style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px;"></p>
-                </div>
+<!-- CROP MODAL -->
+<div id="cropModal" style="display:none;position:fixed;z-index:3000;inset:0;
+     background:rgba(10,15,30,0.96);backdrop-filter:blur(8px);
+     display:none;align-items:center;justify-content:center;">
+    <div style="background:#0A192F;border:1px solid var(--accent-color);border-radius:16px;
+                padding:30px;width:90%;max-width:560px;position:relative;">
+        <h3 style="color:var(--accent-color);margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+            <i class="fas fa-crop-alt"></i> Crop Your Photo
+        </h3>
 
-                <button type="submit" class="admin-btn" style="width: 100%; justify-content: center;">
-                    <i class="fas fa-upload"></i> Upload & Save Photo
-                </button>
-            </form>
+        <!-- Cropper container -->
+        <div style="max-height:380px;overflow:hidden;border-radius:8px;background:#000;">
+            <img id="cropImage" src="" alt="Crop" style="max-width:100%;display:block;">
+        </div>
+
+        <!-- Controls -->
+        <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;justify-content:center;">
+            <button onclick="cropperInstance.rotate(-90)" class="action-btn" title="Rotate Left" style="padding:10px 16px;">
+                <i class="fas fa-undo"></i>
+            </button>
+            <button onclick="cropperInstance.rotate(90)" class="action-btn" title="Rotate Right" style="padding:10px 16px;">
+                <i class="fas fa-redo"></i>
+            </button>
+            <button onclick="cropperInstance.scaleX(cropperInstance.getData().scaleX * -1 || -1)" class="action-btn" title="Flip Horizontal" style="padding:10px 16px;">
+                <i class="fas fa-arrows-alt-h"></i>
+            </button>
+            <button onclick="cropperInstance.reset()" class="action-btn" title="Reset" style="padding:10px 16px;">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+
+        <!-- Crop preview circle -->
+        <div style="text-align:center;margin-top:18px;">
+            <p style="color:var(--text-secondary);font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Preview</p>
+            <div id="cropPreviewCircle"
+                 style="width:100px;height:100px;border-radius:50%;overflow:hidden;margin:0 auto;
+                        border:3px solid var(--accent-color);display:inline-block;"></div>
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:12px;margin-top:22px;">
+            <button onclick="closeCropModal()" class="action-btn" style="flex:1;padding:12px;font-size:0.95rem;">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button onclick="submitCroppedPhoto()" class="admin-btn" id="cropSaveBtn" style="flex:2;justify-content:center;">
+                <i class="fas fa-upload"></i> Crop &amp; Save Photo
+            </button>
         </div>
     </div>
 </div>
@@ -933,31 +955,112 @@ window.onclick = function(event) {
 }
 
 // ---- Profile Photo Preview ----
-function previewPhoto(input) {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('newPhotoPreview').src = e.target.result;
-            document.getElementById('selectedFileName').textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
-            document.getElementById('newPhotoPreviewWrapper').style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    }
+// ---- Cropper.js Photo Flow ----
+let cropperInstance = null;
+
+function openCropper(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const cropImg = document.getElementById('cropImage');
+        cropImg.src = e.target.result;
+
+        // Show modal
+        const modal = document.getElementById('cropModal');
+        modal.style.display = 'flex';
+
+        // Destroy old instance if any
+        if (cropperInstance) {
+            cropperInstance.destroy();
+            cropperInstance = null;
+        }
+
+        // Init Cropper.js
+        cropperInstance = new Cropper(cropImg, {
+            aspectRatio: 1,
+            viewMode: 2,
+            dragMode: 'move',
+            autoCropArea: 0.9,
+            responsive: true,
+            restore: false,
+            guides: true,
+            center: true,
+            highlight: false,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            toggleDragModeOnDblclick: false,
+            preview: '#cropPreviewCircle'
+        });
+    };
+    reader.readAsDataURL(file);
+    // Reset input so same file can be re-selected
+    input.value = '';
 }
 
 function handlePhotoDrop(event) {
     event.preventDefault();
-    document.getElementById('photoDropZone').style.borderColor = 'rgba(255,215,0,0.4)';
+    document.getElementById('photoDropZone').style.borderColor = 'rgba(139,92,246,0.35)';
     const dt = event.dataTransfer;
     if (dt.files && dt.files[0]) {
         const fileInput = document.getElementById('photoFileInput');
-        // Assign dropped file to the input
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(dt.files[0]);
         fileInput.files = dataTransfer.files;
-        previewPhoto(fileInput);
+        openCropper(fileInput);
     }
+}
+
+function closeCropModal() {
+    document.getElementById('cropModal').style.display = 'none';
+    if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+}
+
+function submitCroppedPhoto() {
+    if (!cropperInstance) return;
+
+    const btn = document.getElementById('cropSaveBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+    // Get cropped canvas at 400x400
+    const canvas = cropperInstance.getCroppedCanvas({ width: 400, height: 400 });
+
+    canvas.toBlob(function(blob) {
+        const formData = new FormData();
+        formData.append('photo', blob, 'profile.jpg');
+
+        fetch('{{ url_for("admin_upload_photo") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => {
+            if (res.ok || res.redirected) {
+                // Update the current photo preview immediately
+                const newSrc = URL.createObjectURL(blob);
+                document.getElementById('currentPhotoPreview').src = newSrc;
+                closeCropModal();
+
+                // Show success message
+                const status = document.getElementById('uploadStatus');
+                status.style.display = 'block';
+                status.innerHTML = '<span style="color:#2ecc71;"><i class="fas fa-check-circle"></i> Photo updated successfully! <a href="/" target="_blank" style="color:var(--accent-color);">View site</a></span>';
+
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-upload"></i> Crop & Save Photo';
+            } else {
+                throw new Error('Upload failed with status ' + res.status);
+            }
+        })
+        .catch(err => {
+            const status = document.getElementById('uploadStatus');
+            status.style.display = 'block';
+            status.innerHTML = '<span style="color:#e74c3c;"><i class="fas fa-exclamation-circle"></i> ' + err.message + '</span>';
+            closeCropModal();
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-upload"></i> Crop & Save Photo';
+        });
+    }, 'image/jpeg', 0.92);
 }
 
 // Auto-open Photo tab if redirected back with hash

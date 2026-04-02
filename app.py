@@ -12,10 +12,11 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_portfolio_secret")
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB max upload
 
 # Photo upload config
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
-PHOTO_UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "static", "photos")
+PHOTO_UPLOAD_FOLDER = os.path.join(app.root_path, "static", "photos")
 os.makedirs(PHOTO_UPLOAD_FOLDER, exist_ok=True)
 
 def allowed_file(filename):
@@ -246,16 +247,29 @@ def admin_upload_photo():
         return redirect(url_for("admin_dashboard"))
     
     if file and allowed_file(file.filename):
-        filename = "profile" + "." + file.filename.rsplit(".", 1)[1].lower()
-        filepath = os.path.join(PHOTO_UPLOAD_FOLDER, filename)
-        file.save(filepath)
-        # Store in DB
-        db.settings.update_one(
-            {"_id": "profile_photo"},
-            {"$set": {"filename": filename}},
-            upsert=True
-        )
-        flash("Profile photo updated successfully!", "success")
+        try:
+            ext = file.filename.rsplit(".", 1)[1].lower()
+            # Use a timestamp to bust browser cache
+            import time
+            filename = "profile_" + str(int(time.time())) + "." + ext
+            filepath = os.path.join(PHOTO_UPLOAD_FOLDER, filename)
+            file.save(filepath)
+            # Delete old profile photos to keep folder clean
+            for f in os.listdir(PHOTO_UPLOAD_FOLDER):
+                if f.startswith("profile_") and f != filename:
+                    try:
+                        os.remove(os.path.join(PHOTO_UPLOAD_FOLDER, f))
+                    except Exception:
+                        pass
+            # Store in DB
+            db.settings.update_one(
+                {"_id": "profile_photo"},
+                {"$set": {"filename": filename}},
+                upsert=True
+            )
+            flash("Profile photo updated successfully!", "success")
+        except Exception as e:
+            flash(f"Upload failed: {str(e)}", "error")
     else:
         flash("Invalid file type. Allowed: png, jpg, jpeg, gif, webp.", "error")
     
