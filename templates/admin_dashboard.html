@@ -311,6 +311,7 @@
         <button class="tab-btn" onclick="openTab('certificates')"><i class="fas fa-certificate"></i> Certificates</button>
         <button class="tab-btn" onclick="openTab('projects')"><i class="fas fa-folder"></i> Projects</button>
         <button class="tab-btn" onclick="openTab('messages')"><i class="fas fa-envelope"></i> Messages</button>
+        <button class="tab-btn" onclick="openTab('photo')" id="photo-tab-btn"><i class="fas fa-camera"></i> Profile Photo</button>
     </div>
 
     <!-- TAB CONTENTS -->
@@ -649,6 +650,71 @@
             </div>
         </div>
     </div>
+
+    <!-- PROFILE PHOTO TAB -->
+    <div id="photo" class="tab-pane">
+        <div class="admin-form-panel" style="max-width: 600px; margin: 0 auto;">
+            <h3><i class="fas fa-camera"></i> Update Profile Photo</h3>
+
+            <!-- Current Photo Preview -->
+            <div style="text-align: center; margin-bottom: 30px;">
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Current Photo</p>
+                <img 
+                    id="currentPhotoPreview"
+                    src="{{ photo_url }}"
+                    alt="Profile Photo"
+                    style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
+                           border: 3px solid var(--accent-color); box-shadow: 0 0 25px rgba(255,215,0,0.2);"
+                >
+            </div>
+
+            <!-- Upload Form -->
+            <form action="{{ url_for('admin_upload_photo') }}" method="POST" enctype="multipart/form-data">
+                <!-- Drop Zone -->
+                <div 
+                    id="photoDropZone"
+                    onclick="document.getElementById('photoFileInput').click()"
+                    style="border: 2px dashed rgba(255,215,0,0.4); border-radius: 12px; padding: 40px 20px;
+                           text-align: center; cursor: pointer; transition: 0.3s; margin-bottom: 20px;
+                           background: rgba(255,215,0,0.03);"
+                    ondragover="event.preventDefault(); this.style.borderColor='var(--accent-color)';"
+                    ondragleave="this.style.borderColor='rgba(255,215,0,0.4)';"
+                    ondrop="handlePhotoDrop(event)"
+                >
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 12px;"></i>
+                    <p style="color: #fff; margin: 0; font-size: 1rem;">Click or drag & drop a photo here</p>
+                    <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px;">PNG, JPG, JPEG, GIF, WEBP — Max 5MB</p>
+                </div>
+
+                <input 
+                    type="file" 
+                    name="photo" 
+                    id="photoFileInput" 
+                    accept="image/png,image/jpeg,image/gif,image/webp"
+                    style="display: none;"
+                    onchange="previewPhoto(this)"
+                    required
+                >
+
+                <!-- New Photo Preview (appears after selection) -->
+                <div id="newPhotoPreviewWrapper" style="display:none; text-align:center; margin-bottom:20px;">
+                    <p style="color: var(--accent-color); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">New Photo Preview</p>
+                    <img 
+                        id="newPhotoPreview"
+                        src=""
+                        alt="New Photo"
+                        style="width:140px; height:140px; border-radius:50%; object-fit:cover;
+                               border: 3px solid #3498db; box-shadow: 0 0 20px rgba(52,152,219,0.3);"
+                    >
+                    <p id="selectedFileName" style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px;"></p>
+                </div>
+
+                <button type="submit" class="admin-btn" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-upload"></i> Upload & Save Photo
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 
 <!-- EDIT MODALS -->
@@ -857,5 +923,46 @@ window.onclick = function(event) {
         event.target.style.display = "none";
     }
 }
+
+// ---- Profile Photo Preview ----
+function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('newPhotoPreview').src = e.target.result;
+            document.getElementById('selectedFileName').textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+            document.getElementById('newPhotoPreviewWrapper').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function handlePhotoDrop(event) {
+    event.preventDefault();
+    document.getElementById('photoDropZone').style.borderColor = 'rgba(255,215,0,0.4)';
+    const dt = event.dataTransfer;
+    if (dt.files && dt.files[0]) {
+        const fileInput = document.getElementById('photoFileInput');
+        // Assign dropped file to the input
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(dt.files[0]);
+        fileInput.files = dataTransfer.files;
+        previewPhoto(fileInput);
+    }
+}
+
+// Auto-open Photo tab if redirected back with hash
+(function() {
+    if (window.location.hash === '#photo-tab') {
+        var panes = document.getElementsByClassName('tab-pane');
+        for (var i = 0; i < panes.length; i++) panes[i].classList.remove('active');
+        var btns = document.getElementsByClassName('tab-btn');
+        for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+        document.getElementById('photo').classList.add('active');
+        document.getElementById('photo-tab-btn').classList.add('active');
+        history.replaceState(null, '', window.location.pathname);
+    }
+})();
 </script>
 {% endblock %}

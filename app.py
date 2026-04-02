@@ -6,11 +6,30 @@ from functools import wraps
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_portfolio_secret")
+
+# Photo upload config
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+PHOTO_UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "static", "photos")
+os.makedirs(PHOTO_UPLOAD_FOLDER, exist_ok=True)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def get_profile_photo_url():
+    """Return the URL of the current profile photo from DB settings."""
+    try:
+        setting = db.settings.find_one({"_id": "profile_photo"})
+        if setting and setting.get("filename"):
+            return "/static/photos/" + setting["filename"]
+    except Exception:
+        pass
+    return "/static/photos/Hari.jpeg"  # default fallback
 
 # MongoDB Atlas connection
 mongo_uri = os.getenv("MONGO_URI")
@@ -98,7 +117,8 @@ seed_default_data()
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    photo_url = get_profile_photo_url()
+    return render_template("index.html", photo_url=photo_url)
 
 @app.route("/about")
 def about():
@@ -207,9 +227,39 @@ def admin_dashboard():
         flash("Database connection error. Dashboard features will fail.", "error")
         about_data = None
         skills_list, certs_list, projects_list, messages_list, counts = [], [], [], [], {}
+    photo_url = get_profile_photo_url()
     return render_template("admin_dashboard.html", 
         about=about_data, skills=skills_list, certificates=certs_list, 
-        projects=projects_list, messages=messages_list, counts=counts)
+        projects=projects_list, messages=messages_list, counts=counts,
+        photo_url=photo_url)
+
+@app.route("/admin/upload_photo", methods=["POST"])
+@login_required
+def admin_upload_photo():
+    if "photo" not in request.files:
+        flash("No file selected.", "error")
+        return redirect(url_for("admin_dashboard"))
+    
+    file = request.files["photo"]
+    if file.filename == "":
+        flash("No file selected.", "error")
+        return redirect(url_for("admin_dashboard"))
+    
+    if file and allowed_file(file.filename):
+        filename = "profile" + "." + file.filename.rsplit(".", 1)[1].lower()
+        filepath = os.path.join(PHOTO_UPLOAD_FOLDER, filename)
+        file.save(filepath)
+        # Store in DB
+        db.settings.update_one(
+            {"_id": "profile_photo"},
+            {"$set": {"filename": filename}},
+            upsert=True
+        )
+        flash("Profile photo updated successfully!", "success")
+    else:
+        flash("Invalid file type. Allowed: png, jpg, jpeg, gif, webp.", "error")
+    
+    return redirect(url_for("admin_dashboard") + "#photo-tab")
 
 @app.route("/admin/about/update_text", methods=["POST"])
 @login_required
