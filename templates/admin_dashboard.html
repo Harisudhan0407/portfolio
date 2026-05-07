@@ -276,9 +276,253 @@
     .msg-body {
         color: #fff;
     }
+
+    /* ── MOBILE RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 768px) {
+
+        /* ── Fix: global main centres content and breaks admin layout ── */
+        main {
+            align-items: stretch !important;
+            justify-content: flex-start !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        /* ── Admin wrapper ── */
+        .admin-wrapper {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 16px 14px !important;
+            margin: 0 !important;
+            box-sizing: border-box;
+        }
+
+        /* ── Header ── */
+        .admin-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .admin-title {
+            gap: 10px;
+        }
+        .admin-title h2 {
+            font-size: 1.45rem;
+        }
+        .admin-title i {
+            font-size: 1.6rem !important;
+        }
+        .admin-subtitle {
+            font-size: 0.78rem;
+        }
+        .admin-header > div:last-child {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            width: 100%;
+        }
+        .logout-btn {
+            flex: 1;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.78rem;
+            padding: 9px 8px;
+        }
+
+        /* ── Summary cards: 2 columns ── */
+        .summary-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .summary-card {
+            padding: 16px 10px;
+        }
+        .summary-card .number {
+            font-size: 1.7rem;
+            margin-bottom: 6px;
+        }
+        .summary-card .label {
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            gap: 5px;
+        }
+
+        /* ── Tabs: swipeable horizontal strip ── */
+        .admin-tabs {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            gap: 0;
+            margin-bottom: 18px;
+            padding-bottom: 2px;
+        }
+        .admin-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex: 0 0 auto;
+            font-size: 0.72rem;
+            padding: 9px 11px;
+            gap: 5px;
+            white-space: nowrap;
+            border-bottom-width: 2px;
+        }
+
+        /* ── Panels ── */
+        .admin-form-panel,
+        .admin-list-panel {
+            padding: 16px 12px;
+            margin-bottom: 16px;
+            border-radius: 10px;
+        }
+        .admin-form-panel h3,
+        .admin-list-panel h3 {
+            font-size: 0.95rem;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        /* ── Form rows: always stack ── */
+        .form-row {
+            flex-direction: column !important;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .form-col {
+            flex: unset !important;
+            width: 100% !important;
+            min-width: 0;
+        }
+        /* inline style flex overrides */
+        [style*="flex: 2"], [style*="flex: 1"] {
+            flex: unset !important;
+            width: 100% !important;
+        }
+
+        /* ── Inputs ── */
+        .admin-input {
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 0.85rem;
+            padding: 10px 12px;
+        }
+        select.admin-input {
+            appearance: auto;
+            -webkit-appearance: auto;
+        }
+
+        /* ── Buttons ── */
+        .admin-btn {
+            width: 100%;
+            min-width: unset;
+            padding: 12px;
+            font-size: 0.88rem;
+            box-sizing: border-box;
+        }
+        .action-btn {
+            padding: 6px 9px;
+            font-size: 0.78rem;
+        }
+
+        /* ── Tables: horizontal scroll ── */
+        .admin-list-panel {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .admin-table {
+            min-width: 520px; /* force scroll rather than squish */
+            font-size: 0.8rem;
+        }
+        .admin-table th,
+        .admin-table td {
+            padding: 10px 8px;
+            white-space: nowrap;
+        }
+
+        /* ── Modals ── */
+        .modal-content {
+            margin: 4vh auto !important;
+            padding: 20px 14px !important;
+            width: 95% !important;
+            max-width: 95% !important;
+            box-sizing: border-box;
+        }
+        .close-modal {
+            font-size: 1.3rem;
+            top: 14px;
+            right: 14px;
+        }
+        /* Modal form rows also stack */
+        .modal-content .form-row {
+            flex-direction: column !important;
+            gap: 12px;
+        }
+        .modal-content .form-col {
+            flex: unset !important;
+            width: 100% !important;
+        }
+        .modal-content [style*="text-align: right"],
+        .modal-content [style*="text-align:right"] {
+            text-align: left !important;
+        }
+        .modal-content .admin-btn {
+            width: 100%;
+        }
+
+        /* ── Messages ── */
+        .msg-card > div:first-child {
+            flex-direction: column;
+            gap: 5px;
+            align-items: flex-start;
+        }
+        .msg-card > div:first-child > span {
+            font-size: 0.75rem;
+        }
+
+        /* ── Profile photo panel ── */
+        #photo .admin-form-panel {
+            max-width: 100% !important;
+        }
+        #photoDropZone {
+            padding: 28px 14px !important;
+        }
+
+        /* ── Crop modal ── */
+        #cropModal > div {
+            width: 96% !important;
+            max-width: 96% !important;
+            padding: 16px 12px !important;
+        }
+        #cropModal > div > div:first-of-type {
+            max-height: 260px !important;
+        }
+    }
+
+    /* ── Extra-small phones (≤ 400px) ── */
+    @media (max-width: 400px) {
+        .admin-wrapper {
+            padding: 12px 10px !important;
+        }
+        .summary-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .summary-card .number {
+            font-size: 1.5rem;
+        }
+        .tab-btn {
+            font-size: 0.68rem;
+            padding: 8px 9px;
+        }
+        .admin-title h2 {
+            font-size: 1.25rem;
+        }
+    }
 </style>
 
-<div class="container" style="max-width: 1200px;">
+<div class="container admin-wrapper" style="max-width: 1200px;">
     
     <!-- HEADER -->
     <div class="admin-header">
