@@ -1,4 +1,5 @@
 import os
+import time
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from pymongo import MongoClient
 from datetime import datetime
@@ -22,15 +23,6 @@ os.makedirs(PHOTO_UPLOAD_FOLDER, exist_ok=True)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def get_profile_photo_url():
-    """Return the URL of the current profile photo from DB settings."""
-    try:
-        setting = db.settings.find_one({"_id": "profile_photo"})
-        if setting and setting.get("filename"):
-            return "/static/photos/" + setting["filename"]
-    except Exception:
-        pass
-    return "/static/photos/Hari.jpeg"  # default fallback
 
 # MongoDB Atlas connection
 mongo_uri = os.getenv("MONGO_URI")
@@ -43,6 +35,18 @@ try:
     db = client["portfolio"]
 except Exception as e:
     print(f"Failed to connect to MongoDB: {e}")
+
+def get_profile_photo_url():
+    """Return the URL of the current profile photo from DB settings."""
+    try:
+        # Check if db is defined to avoid errors
+        if 'db' in globals():
+            setting = db.settings.find_one({"_id": "profile_photo"})
+            if setting and setting.get("filename"):
+                return f"/static/photos/{setting['filename']}?v={int(time.time())}"
+    except Exception:
+        pass
+    return "/static/photos/Hari.jpeg"  # default fallback
 
 # Admin authentication decorator
 def login_required(f):
