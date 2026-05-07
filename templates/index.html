@@ -9,7 +9,7 @@
     </div>
     <div class="profile-photo-container">
         <!-- Replace the src below with your actual photo path, e.g., /static/images/profile.jpg -->
-        <img src="{{ photo_url }}" alt="Harisudhan K" class="profile-photo" id="home-profile-photo">
+        <img src="{{ url_for('static', filename='photos/' + photo_url) }}?v={{ range(1, 100000)|random }}" alt="Harisudhan K" class="profile-photo" id="home-profile-photo">
     </div>
 </div>
 
