@@ -17,7 +17,7 @@ app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB max upload
 
 # Photo upload config
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
-PHOTO_UPLOAD_FOLDER = os.path.join(app.root_path, "static", "photos")
+PHOTO_UPLOAD_FOLDER = os.path.join(app.root_path, "static", "uploads")
 os.makedirs(PHOTO_UPLOAD_FOLDER, exist_ok=True)
 
 def allowed_file(filename):
@@ -36,16 +36,22 @@ try:
 except Exception as e:
     print(f"Failed to connect to MongoDB: {e}")
 
-def get_profile_photo_url():
-    """Return the filename of the current profile photo from DB settings."""
+@app.context_processor
+def inject_profile_image():
+    """Provides the profile_image URL to all templates automatically."""
     try:
-        # Access db directly, it's global
         setting = db.settings.find_one({"_id": "profile_photo"})
         if setting and setting.get("filename"):
-            return setting['filename']
-    except Exception as e:
-        print(f"Photo Fetch Error: {e}")
-    return "Hari.jpeg"  # default fallback filename
+            filename = setting['filename']
+        else:
+            filename = "Hari.jpeg"
+    except Exception:
+        filename = "Hari.jpeg"
+    
+    # Return the URL with a timestamp for global cache busting
+    import time
+    image_url = url_for('static', filename='uploads/' + filename) + f"?v={int(time.time())}"
+    return dict(profile_image=image_url)
 
 # Admin authentication decorator
 def login_required(f):
@@ -121,8 +127,7 @@ seed_default_data()
 
 @app.route("/")
 def home():
-    photo_url = get_profile_photo_url()
-    return render_template("index.html", photo_url=photo_url)
+    return render_template("index.html")
 
 @app.route("/about")
 def about():
@@ -234,8 +239,7 @@ def admin_dashboard():
     photo_url = get_profile_photo_url()
     return render_template("admin_dashboard.html", 
         about=about_data, skills=skills_list, certificates=certs_list, 
-        projects=projects_list, messages=messages_list, counts=counts,
-        photo_url=photo_url)
+        projects=projects_list, messages=messages_list, counts=counts)
 
 @app.route("/admin/upload_photo", methods=["POST"])
 @login_required
@@ -254,18 +258,14 @@ def admin_upload_photo():
             ext = file.filename.rsplit(".", 1)[1].lower()
             # Use a timestamp to bust browser cache
             import time
-            filename = "profile_" + str(int(time.time())) + "." + ext
+            filename = "profile_main.jpg" # Keep a consistent filename for replacement logic
             filepath = os.path.join(PHOTO_UPLOAD_FOLDER, filename)
+            
+            # Save the file (overwrite if exists)
             file.save(filepath)
-            print(f"--- PHOTO UPLOADED: {filename} ---")
-            # Delete old profile photos to keep folder clean
-            for f in os.listdir(PHOTO_UPLOAD_FOLDER):
-                if f.startswith("profile_") and f != filename:
-                    try:
-                        os.remove(os.path.join(PHOTO_UPLOAD_FOLDER, f))
-                    except Exception:
-                        pass
-            # Store in DB
+            print(f"--- PROFILE PHOTO UPDATED: {filename} ---")
+            
+            # Store in DB as source of truth
             db.settings.update_one(
                 {"_id": "profile_photo"},
                 {"$set": {"filename": filename}},
