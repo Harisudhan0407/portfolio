@@ -39,12 +39,12 @@ except Exception as e:
 def get_profile_photo_url():
     """Return the filename of the current profile photo from DB settings."""
     try:
-        if 'db' in globals():
-            setting = db.settings.find_one({"_id": "profile_photo"})
-            if setting and setting.get("filename"):
-                return setting['filename']
-    except Exception:
-        pass
+        # Access db directly, it's global
+        setting = db.settings.find_one({"_id": "profile_photo"})
+        if setting and setting.get("filename"):
+            return setting['filename']
+    except Exception as e:
+        print(f"Photo Fetch Error: {e}")
     return "Hari.jpeg"  # default fallback filename
 
 # Admin authentication decorator
@@ -257,6 +257,7 @@ def admin_upload_photo():
             filename = "profile_" + str(int(time.time())) + "." + ext
             filepath = os.path.join(PHOTO_UPLOAD_FOLDER, filename)
             file.save(filepath)
+            print(f"--- PHOTO UPLOADED: {filename} ---")
             # Delete old profile photos to keep folder clean
             for f in os.listdir(PHOTO_UPLOAD_FOLDER):
                 if f.startswith("profile_") and f != filename:

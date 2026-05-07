@@ -1280,18 +1280,14 @@ function submitCroppedPhoto() {
         })
         .then(res => {
             if (res.ok || res.redirected) {
-                // Update the current photo preview immediately
-                const newSrc = URL.createObjectURL(blob);
-                document.getElementById('currentPhotoPreview').src = newSrc;
-                closeCropModal();
-
-                // Show success message
+                // Show success message and reload to sync everything
                 const status = document.getElementById('uploadStatus');
                 status.style.display = 'block';
-                status.innerHTML = '<span style="color:#2ecc71;"><i class="fas fa-check-circle"></i> Photo updated successfully! <a href="/" target="_blank" style="color:var(--accent-color);">View site</a></span>';
-
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-upload"></i> Crop & Save Photo';
+                status.innerHTML = '<span style="color:#2ecc71;"><i class="fas fa-check-circle"></i> Photo updated! Syncing...</span>';
+                
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             } else {
                 throw new Error('Upload failed with status ' + res.status);
             }
