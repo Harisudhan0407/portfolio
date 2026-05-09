@@ -134,7 +134,7 @@
                             
                             <div>
                                 <label class="label">Upload & Crop New Photo</label>
-                                <input type="file" id="profile-upload" name="photo" class="input-field" accept="image/*">
+                                <input type="file" id="profile-upload" class="input-field" accept="image/*">
                                 <input type="hidden" id="cropped-image-data" name="cropped_image">
                             </div>
 
@@ -683,7 +683,7 @@
                 height: 500
             });
             
-            croppedInput.value = canvas.toDataURL('image/jpeg', 0.9);
+            croppedInput.value = canvas.toDataURL('image/jpeg', 0.6);
             alert('Crop applied! You can now click "Save Profile" to update.');
             
             closeModal('cropModal');
