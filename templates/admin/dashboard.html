@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <style>
-        :root { --accent-yellow: #facc15; --bg-dark: #0f172a; }
+        :root { --accent-yellow: #60a5fa; --bg-dark: #0f172a; --accent-gold: #60a5fa; }
         body { background: var(--bg-dark); color: #fff; }
         .dashboard-container { max-width: 1400px; margin: 0 auto; padding: 60px 40px; }
         
@@ -40,8 +40,8 @@
         .input-field { background: #1e293b; border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; color: #fff; outline: none; width: 100%; }
         .label { display: block; margin-bottom: 8px; color: var(--accent-gold); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
         
-        .btn-add { background: #facc15; color: #000; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(250, 204, 21, 0.3); }
+        .btn-add { background: #3b82f6; color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3); }
 
         .data-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .data-table th { text-align: left; padding: 15px; color: var(--text-dim); border-bottom: 1px solid var(--glass-border); font-size: 0.8rem; text-transform: uppercase; }
@@ -304,7 +304,7 @@
                 <form action="{{ url_for('admin.add_cert') }}" method="POST" enctype="multipart/form-data">
                     <div class="input-group">
                         <div>
-                            <label class="label">Cert Name *</label>
+                            <label class="label">Certificate Name *</label>
                             <input type="text" name="name" class="input-field" required>
                         </div>
                         <div>
@@ -319,7 +319,7 @@
                             <label class="label">Verification File</label>
                             <input type="file" name="cert_file" class="input-field">
                         </div>
-                        <button type="submit" class="btn-add">+ Add Cert</button>
+                        <button type="submit" class="btn-add">+ Add Certificate</button>
                     </div>
                 </form>
             </div>
@@ -456,7 +456,7 @@
             </div>
             <form id="editCertForm" method="POST" enctype="multipart/form-data">
                 <div style="margin-bottom: 20px;">
-                    <label class="label">Cert Name *</label>
+                    <label class="label">Certificate Name *</label>
                     <input type="text" id="editCertName" name="name" class="input-field" required>
                 </div>
                 <div style="margin-bottom: 20px;">

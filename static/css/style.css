@@ -10,7 +10,7 @@
     --secondary-bg: #0f172a;
     --accent-blue: #3b82f6;
     --accent-purple: #a855f7;
-    --accent-gold: #facc15;
+    --accent-gold: #60a5fa;
     --neon-glow: rgba(59, 130, 246, 0.5);
     --text-main: #f8fafc;
     --text-dim: #94a3b8;
@@ -228,6 +228,21 @@ body.light-mode .theme-btn {
     font-size: 1.5rem;
     color: var(--accent-blue);
     margin-bottom: 30px;
+}
+
+/* Grid Layouts */
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+@media (max-width: 992px) {
+    .cert-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .cert-grid { grid-template-columns: 1fr; }
 }
 
 /* Particle Container */
