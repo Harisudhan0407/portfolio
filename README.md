@@ -1,53 +1,68 @@
-# Harisudhan K - Professional Portfolio
+# Futuristic Luxury Portfolio - HARISUDHAN K
 
-This is a modern, responsive, and professional full-stack portfolio website built for Harisudhan K. It features a deep navy and gold aesthetic, glassmorphism cards, parallax scrolling, 3D floating shapes, and animated skill bars.
+A premium, modern, and futuristic full-stack developer portfolio built with Python Flask and MongoDB.
 
 ## Features
-- **Frontend**: Vanilla HTML/CSS/JavaScript with responsive layout.
-- **Backend**: Python Flask handling routing and contact form submissions.
-- **Database**: MongoDB Atlas integration for storing contact messages.
-- **Design Elements**:
-  - Consistent deep navy & gold color scheme.
-  - Interactive parallax background and floating 3D elements.
-  - Scroll-triggered animations and skill bars.
+- **Futuristic Design**: Glassmorphism, neon gradients, and royal typography.
+- **Dynamic Content**: Projects, skills, and certifications managed via an Admin Dashboard.
+- **3D Interactions**: Card tilt effects, custom cursor, and smooth scroll animations.
+- **Full Stack**: Flask backend with MongoDB Atlas integration.
+- **Secure Admin**: Protected dashboard for managing portfolio content and viewing messages.
 
-## Pages
-1. **Home** (`/`): Brief introduction and academic highlights.
-2. **About** (`/about`): Detailed academic background and career vision in IoT/Web systems.
-3. **Projects** (`/projects`): Showcases the MedClinic AI clinical support system.
-4. **Skills** (`/skills`): Animated breakdown of technical API/Web/IoT skills and soft skills.
-5. **Contact** (`/contact`): Contact details and a working contact form writing directly to MongoDB.
-
-## Requirements
-- Python 3.8+
-- MongoDB Atlas account (or local MongoDB database)
+## Tech Stack
+- **Frontend**: HTML5, CSS3 (Vanilla), JavaScript (Vanilla)
+- **Backend**: Python Flask
+- **Database**: MongoDB
+- **Animations**: Particles.js, CSS Keyframes
 
 ## Setup Instructions
 
-1. **Install Dependencies**
+### 1. Prerequisites
+- Python 3.8+
+- MongoDB installed locally or a MongoDB Atlas URI.
+
+### 2. Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Harisudhan0407/portfolio.git
+   cd portfolio
+   ```
+2. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Environment Variables**
-   Set the following environment variables (or create a `.env` file if using `python-dotenv`):
-   ```bash
-   # MongoDB Atlas Connection URI
-   MONGO_URI="mongodb+srv://<username>:<password>@cluster.mongodb.net/?retryWrites=true&w=majority"
-   
-   # Flask Session Secret Key
-   SECRET_KEY="your-secret-key"
-   ```
+### 3. Configuration
+Create a `.env` file in the root directory (template provided in `.env.example` or use the one generated):
+```env
+SECRET_KEY=your_secret_key
+MONGO_URI=mongodb://localhost:27017/portfolio_db
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
+```
 
-3. **Run the Application**
-   ```bash
-   python app.py
-   ```
+### 4. Database Seeding
+Run the seed script to populate initial data:
+```bash
+python seed_db.py
+```
 
-4. **Access the Application**
-   Open your web browser and navigate to:
-   [http://127.0.0.1:5000](http://127.0.0.1:5000)
+### 5. Run the Application
+```bash
+python app.py
+```
+Visit `http://127.0.0.1:5000` to view your portfolio.
 
-## Design Notes
-- No UI changes or alterations from the core theme requests were made; the design strictly adhered to the classic + royal + professional guidelines requested.
-- Content specifically reflects Harisudhan K's educational background and project summaries with no filler text.
+## Deployment Guide (Vercel)
+1. Push your code to GitHub.
+2. Connect your repository to Vercel.
+3. Add Environment Variables (`MONGO_URI`, `SECRET_KEY`, etc.) in Vercel settings.
+4. Ensure `vercel.json` is configured (if needed) or let Vercel auto-detect the Flask app.
+
+## License
+MIT License

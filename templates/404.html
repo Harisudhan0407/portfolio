@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}404 - Lost in Space | HARISUDHAN K{% endblock %}
+
+{% block content %}
+<section style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;">
+    <h1 style="font-size: 10rem; background: linear-gradient(var(--accent-blue), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;">404</h1>
+    <h2 class="royal-text" style="margin-bottom: 20px;">LOST IN SPACE</h2>
+    <p style="color: var(--text-dim); max-width: 500px; margin-bottom: 40px;">
+        The page you are looking for has been swallowed by a black hole or never existed in this dimension.
+    </p>
+    <a href="{{ url_for('main.index') }}" class="btn-neon">Back to Home Dimension</a>
+</section>
+{% endblock %}

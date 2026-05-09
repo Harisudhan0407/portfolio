@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Profile | Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-nav {
+            background: var(--secondary-bg);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-links { display: flex; gap: 30px; list-style: none; align-items: center; }
+        .nav-link { color: var(--text-dim); text-decoration: none; display: flex; align-items: center; gap: 10px; transition: var(--transition-smooth); font-size: 0.9rem; }
+        .nav-link:hover, .nav-link.active { color: var(--accent-blue); }
+        .main-content { padding: 40px; max-width: 1400px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <nav class="admin-nav">
+        <h1 class="royal-text" style="font-size: 1.2rem; margin: 0;">Profile</h1>
+        
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin.dashboard') }}" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('admin.projects') }}" class="nav-link"><i class="fas fa-project-diagram"></i> Projects</a></li>
+            <li><a href="{{ url_for('admin.messages') }}" class="nav-link"><i class="fas fa-envelope"></i> Messages</a></li>
+            <li><a href="{{ url_for('admin.profile') }}" class="nav-link active"><i class="fas fa-user-edit"></i> Profile</a></li>
+            <li><a href="{{ url_for('admin.logout') }}" class="nav-link" style="color: #fca5a5;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+
+        <div class="glass" style="padding: 5px 15px; border-radius: 50px; font-size: 0.8rem;">
+            <i class="fas fa-id-card" style="color: var(--accent-blue); margin-right: 5px;"></i> Edit Mode
+        </div>
+    </nav>
+
+    <main class="main-content">
+            <header style="margin-bottom: 40px;">
+                <h1 class="royal-text">Update Profile</h1>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="padding: 15px; margin-bottom: 20px; border-radius: 8px; background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <div class="glass" style="padding: 40px; max-width: 800px;">
+                <form action="{{ url_for('admin.update_profile') }}" method="POST" enctype="multipart/form-data">
+                    <div style="display: grid; grid-template-columns: 200px 1fr; gap: 40px; align-items: start;">
+                        <!-- Current Photo -->
+                        <div style="text-align: center;">
+                            <div style="width: 200px; height: 260px; background: #1e293b; border-radius: 15px; overflow: hidden; margin-bottom: 20px;">
+                                {% if profile and profile.image_path %}
+                                    <img src="{{ url_for('static', filename='uploads/' + profile.image_path) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-dim);">
+                                        <i class="fas fa-user" style="font-size: 4rem;"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <label class="btn-neon" style="padding: 8px 15px; font-size: 0.75rem; cursor: pointer;">
+                                Change Photo
+                                <input type="file" name="photo" style="display: none;" onchange="this.form.submit()">
+                            </label>
+                        </div>
+
+                        <!-- Details -->
+                        <div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; color: var(--text-dim);">Display Name</label>
+                                <input type="text" name="name" value="{{ profile.name if profile else '' }}" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: #fff;">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; color: var(--text-dim);">Professional Role</label>
+                                <input type="text" name="role" value="{{ profile.role if profile else '' }}" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: #fff;">
+                            </div>
+                            <div style="margin-bottom: 30px;">
+                                <label style="display: block; margin-bottom: 8px; color: var(--text-dim);">About Me Bio</label>
+                                <textarea name="about" rows="6" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: #fff; resize: none;">{{ profile.about if profile else '' }}</textarea>
+                            </div>
+                            <button type="submit" class="btn-neon" style="width: 100%;">Save Profile Details</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+</body>
+</html>

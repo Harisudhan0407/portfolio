@@ -1,35 +1,67 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block title %}Contact | HARISUDHAN K{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 900px;">
-    
-    <div style="text-align: center; margin-bottom: 40px;">
-        <p style="color: var(--text-secondary); font-size: 1.1rem;">Let's collaborate and build something amazing together</p>
-    </div>
+<section style="padding: 150px 20px 100px;">
+    <div class="container" style="max-width: 1000px; margin: 0 auto;">
+        <h1 class="royal-text" style="text-align: center; margin-bottom: 20px;">Get In Touch</h1>
+        <p style="text-align: center; color: var(--text-dim); margin-bottom: 80px;">Let's collaborate on something extraordinary.</p>
 
-    <!-- 2x2 Contact Grid -->
-    <div class="contact-grid">
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=harisudhan072008@gmail.com&su=Hello%20Harisudhan%20-%20Portfolio%20Inquiry" target="_blank" class="contact-card reveal">
-            <i class="fas fa-envelope"></i>
-            <h4>Email</h4>
-            <p>harisudhan072008@gmail.com</p>
-        </a>
-        <a href="https://linkedin.com/in/harisudhan-k-" target="_blank" class="contact-card reveal">
-            <i class="fab fa-linkedin"></i>
-            <h4>LinkedIn</h4>
-            <p>linkedin.com/in/harisudhan-k-</p>
-        </a>
-        <a href="https://github.com/Harisudhan0407" target="_blank" class="contact-card reveal">
-            <i class="fab fa-github"></i>
-            <h4>GitHub</h4>
-            <p>github.com/Harisudhan0407</p>
-        </a>
-        <a href="https://wa.me/919443286016" target="_blank" class="contact-card reveal">
-            <i class="fab fa-whatsapp"></i>
-            <h4>WhatsApp</h4>
-            <p>+91 94432 86016</p>
-        </a>
-    </div>
+        <div style="max-width: 600px; margin: 0 auto;">
+            <!-- Contact Info (Centered) -->
+            <div>
+                <h2 style="color: var(--accent-blue); margin-bottom: 40px; text-align: center;">Contact Information</h2>
+                
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=harisudhan072008@gmail.com" target="_blank" class="glass-link" style="text-decoration: none; display: block; margin-bottom: 25px;">
+                    <div class="glass" style="padding: 25px; display: flex; align-items: center; gap: 20px; transition: transform 0.3s ease, border-color 0.3s ease;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(59, 130, 246, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent-blue);">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.8rem; color: var(--text-dim); margin: 0;">Email</p>
+                            <p style="font-weight: bold; color: #fff; margin: 0;">harisudhan072008@gmail.com</p>
+                        </div>
+                    </div>
+                </a>
 
-</div>
+                <a href="https://wa.me/919443286016" target="_blank" class="glass-link" style="text-decoration: none; display: block; margin-bottom: 25px;">
+                    <div class="glass" style="padding: 25px; display: flex; align-items: center; gap: 20px; transition: transform 0.3s ease, border-color 0.3s ease;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(168, 85, 247, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent-purple);">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.8rem; color: var(--text-dim); margin: 0;">WhatsApp</p>
+                            <p style="font-weight: bold; color: #fff; margin: 0;">+91 9443286016</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://github.com/Harisudhan0407" target="_blank" class="glass-link" style="text-decoration: none; display: block; margin-bottom: 25px;">
+                    <div class="glass" style="padding: 25px; display: flex; align-items: center; gap: 20px; transition: transform 0.3s ease, border-color 0.3s ease;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(15, 23, 42, 0.2); display: flex; align-items: center; justify-content: center; color: #fff;">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.8rem; color: var(--text-dim); margin: 0;">GitHub</p>
+                            <p style="font-weight: bold; color: #fff; margin: 0;">github.com/Harisudhan0407</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.linkedin.com/in/harisudhank/" target="_blank" class="glass-link" style="text-decoration: none; display: block; margin-bottom: 25px;">
+                    <div class="glass" style="padding: 25px; display: flex; align-items: center; gap: 20px; transition: transform 0.3s ease, border-color 0.3s ease;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(0, 119, 181, 0.1); display: flex; align-items: center; justify-content: center; color: #0077b5;">
+                            <i class="fab fa-linkedin"></i>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.8rem; color: var(--text-dim); margin: 0;">LinkedIn</p>
+                            <p style="font-weight: bold; color: #fff; margin: 0;">linkedin.com/in/harisudhank</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

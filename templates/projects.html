@@ -1,40 +1,43 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block title %}Projects | HARISUDHAN K{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2 class="section-title">Projects</h2>
-    
-    <div class="projects-container">
-        {% if projects %}
-            {% for project in projects %}
-            <div class="glass-card project-card reveal">
-                <h3>{% if project.icon %}<i class="fas {{ project.icon }}"></i> {% endif %}{{ project.title }}</h3>
-                
-                <div class="project-details">
-                    <p>{{ project.description }}</p>
+<section style="padding: 150px 20px 100px;">
+    <div class="container" style="max-width: 1200px; margin: 0 auto;">
+        <h1 class="royal-text" style="text-align: center; margin-bottom: 20px;">Innovative Works</h1>
+        <p style="text-align: center; color: var(--text-dim); margin-bottom: 80px;">Showcasing my technical creations and experiments.</p>
 
-                    <div class="tech-stack">
-                        {% for tag in project.tags.split(',') %}
-                        <span class="tech-tag">{{ tag.strip() }}</span>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
+            {% if projects %}
+                {% for project in projects %}
+                <div class="glass tilt-card" style="padding: 40px; border-radius: 20px;">
+                    <h2 class="royal-text" style="color: var(--accent-gold); margin-bottom: 20px; font-size: 1.8rem;">{{ project.title }}</h2>
+                    <p style="color: var(--text-main); line-height: 1.8; margin-bottom: 30px; font-size: 1rem; opacity: 0.9;">{{ project.description }}</p>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;">
+                        {% for tag in project.tags %}
+                        <span style="background: rgba(59, 130, 246, 0.1); color: var(--accent-gold); padding: 6px 15px; font-size: 0.8rem; border-radius: 50px; border: 1px solid var(--glass-border);">{{ tag }}</span>
                         {% endfor %}
                     </div>
-                    
-                    <div class="project-actions">
-                        {% if project.github_url and project.github_url != '#' %}
-                        <a href="{{ project.github_url }}" target="_blank" class="btn"><i class="fab fa-github"></i> View Code</a>
-                        {% endif %}
-                        {% if project.live_url %}
-                        <a href="{{ project.live_url }}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Live Demo</a>
-                        {% endif %}
-                    </div>
+
                 </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <div class="glass-card" style="text-align: center; padding: 50px;">
-                <p style="color: var(--text-secondary); font-size: 1.1rem;">No projects added yet.</p>
-            </div>
-        {% endif %}
+                {% endfor %}
+            {% else %}
+                <!-- Fallback Static Item -->
+                <div class="glass tilt-card" style="padding: 40px; border-radius: 20px;">
+                    <h2 class="royal-text" style="color: var(--accent-gold); margin-bottom: 20px; font-size: 1.8rem;">MedClinic AI</h2>
+                    <p style="color: var(--text-main); line-height: 1.8; margin-bottom: 30px; font-size: 1rem; opacity: 0.9;">AI-powered clinical support system helping users recover from health issues using intelligent AI suggestions and real-time medical data analysis.</p>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;">
+                        <span style="background: rgba(250, 204, 21, 0.1); color: #facc15; padding: 6px 15px; font-size: 0.8rem; border-radius: 50px; border: 1px solid rgba(250, 204, 21, 0.2);">Flask</span>
+                        <span style="background: rgba(250, 204, 21, 0.1); color: #facc15; padding: 6px 15px; font-size: 0.8rem; border-radius: 50px; border: 1px solid rgba(250, 204, 21, 0.2);">MongoDB</span>
+                        <span style="background: rgba(250, 204, 21, 0.1); color: #facc15; padding: 6px 15px; font-size: 0.8rem; border-radius: 50px; border: 1px solid rgba(250, 204, 21, 0.2);">AI</span>
+                    </div>
+
+                </div>
+            {% endif %}
+        </div>
     </div>
-</div>
+</section>
 {% endblock %}

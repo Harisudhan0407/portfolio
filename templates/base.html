@@ -3,131 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harisudhan K | Portfolio</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}?v=7">
-    <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <title>{% block title %}HARISUDHAN K | Portfolio{% endblock %}</title>
+    <meta name="description" content="Portfolio of HARISUDHAN K - CSE (IoT) Student & Web Developer">
     
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Flash messages styling inline for base */
-        .flashes {
-            list-style-type: none;
-            padding: 0;
-            width: 80%;
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: center;
-        }
-        .flashes li {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .flashes .success { background-color: rgba(40, 167, 69, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
-        .flashes .error { background-color: rgba(220, 53, 69, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
-    </style>
 </head>
 <body>
-    <nav class="navbar" id="navbar">
-        <div class="nav-content">
-            <div class="nav-left">
-                <a href="/admin" class="admin-link">
-                    <i class="fas fa-shield-alt"></i> Admin
-                </a>
-            </div>
-            
-            <div class="menu-toggle" id="mobile-menu">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
 
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/skills">Skills</a></li>
-                <li><a href="/projects">Projects</a></li>
-                <li><a href="/certificates">Certificates</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-
-            <!-- Theme Toggle Button -->
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
-                <i class="fas fa-moon" id="theme-icon"></i>
+    <!-- Navbar -->
+    <nav id="navbar">
+        <div class="logo"><a href="{{ url_for('admin.login') }}" style="text-decoration: none; color: #facc15; display: flex; align-items: center; gap: 10px;"><i class="fas fa-shield-alt"></i>Admin</a></div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('main.index') }}" class="{{ 'active' if request.endpoint == 'main.index' else '' }}">Home</a></li>
+            <li><a href="{{ url_for('main.about') }}" class="{{ 'active' if request.endpoint == 'main.about' else '' }}">About</a></li>
+            <li><a href="{{ url_for('main.skills') }}" class="{{ 'active' if request.endpoint == 'main.skills' else '' }}">Skills</a></li>
+            <li><a href="{{ url_for('main.projects') }}" class="{{ 'active' if request.endpoint == 'main.projects' else '' }}">Projects</a></li>
+            <li><a href="{{ url_for('main.certifications') }}" class="{{ 'active' if request.endpoint == 'main.certifications' else '' }}">Certificates</a></li>
+            <li><a href="{{ url_for('main.contact') }}" class="{{ 'active' if request.endpoint == 'main.contact' else '' }}">Contact</a></li>
+        </ul>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 20px;">
+            <button id="theme-toggle" class="theme-btn">
+                <i class="fas fa-moon"></i>
+                <span id="theme-text">Dark</span>
             </button>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
     </nav>
 
     <main>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <ul class="flashes">
-            {% for category, message in messages %}
-              <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <p>&copy; 2026 Harisudhan K. All rights reserved.</p>
-    </footer>
-
-    <!-- Three.js could be used for advanced 3D but standard CSS animations are used for robust performance here -->
-    <script>
-        const menuToggle = document.getElementById('mobile-menu');
-        const navLinks = document.querySelector('.nav-links');
-
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-
-        // --- Dark / Light Mode Toggle ---
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-
-        function applyTheme(theme) {
-            if (theme === 'light') {
-                document.body.classList.add('light-mode');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                document.body.classList.remove('light-mode');
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-            // Re-trigger scroll handler so navbar background updates immediately
-            window.dispatchEvent(new Event('scroll'));
-        }
-
-        // Load saved preference
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        applyTheme(savedTheme);
-
-        themeToggleBtn.addEventListener('click', () => {
-            const isLight = document.body.classList.contains('light-mode');
-            const newTheme = isLight ? 'dark' : 'light';
-            localStorage.setItem('theme', newTheme);
-            applyTheme(newTheme);
-        });
-    </script>
+    <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
