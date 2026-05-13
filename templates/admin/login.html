@@ -11,13 +11,13 @@
     
     <div class="glass" style="width: 100%; max-width: 450px; padding: 50px 40px; text-align: center; border-radius: 20px;">
         <!-- SVG Shield in Dark Circle -->
-        <div style="width: 80px; height: 80px; background: #0f172a; border: 2px solid #facc15; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; box-shadow: 0 0 20px rgba(250, 204, 21, 0.2);">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div style="width: 80px; height: 80px; background: #0f172a; border: 2px solid var(--accent-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             </svg>
         </div>
 
-        <h1 class="royal-text" style="font-size: 2.2rem; color: #facc15; margin-bottom: 10px;">Admin Panel</h1>
+        <h1 class="royal-text" style="font-size: 2.2rem; color: var(--accent-blue); margin-bottom: 10px;">Admin Panel</h1>
         <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem;">Enter your password to access the dashboard</p>
         
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -34,13 +34,13 @@
 
         <form action="{{ url_for('admin.login') }}" method="POST">
             <div style="text-align: left; margin-bottom: 30px;">
-                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: #facc15; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--accent-blue); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
                     <i class="fas fa-lock"></i> Password
                 </label>
                 <input type="password" name="password" placeholder="Enter admin password" required 
                        style="width: 100%; padding: 15px; background: #0f172a; border: 1px solid #fff; border-radius: 10px; color: #fff; outline: none; font-size: 1rem;">
             </div>
-            <button type="submit" class="btn-neon" style="width: 100%; background: #facc15; color: #0f172a; border: none; padding: 15px; font-weight: bold; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <button type="submit" class="btn-neon" style="width: 100%; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <i class="fas fa-sign-in-alt"></i> Login
             </button>
         </form>

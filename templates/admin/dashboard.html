@@ -118,11 +118,14 @@
             
             /* Top Horizontal Nav for Mobile */
             .sidebar-nav {
+                display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 10px;
                 padding-right: 0;
+                overflow: visible; /* Fix flexbox overlap bug */
+                flex: none; /* Fix flexbox overlap bug */
             }
             .tab-btn, .tab-logout {
                 width: auto;
