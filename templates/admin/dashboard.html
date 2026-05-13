@@ -118,16 +118,14 @@
             .header { flex-direction: column; gap: 15px; margin-bottom: 30px; text-align: center; }
             
             .tabs-nav {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding: 10px 20px;
-                gap: 20px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 15px 5px;
+                gap: 15px;
                 position: static; /* Un-stick on mobile */
                 border-bottom: 1px solid rgba(255,255,255,0.1);
-                -webkit-overflow-scrolling: touch;
             }
-            .tabs-nav::-webkit-scrollbar { display: none; }
             
             .stats-grid { grid-template-columns: 1fr !important; }
             .input-group { grid-template-columns: 1fr !important; }
