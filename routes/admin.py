@@ -5,6 +5,15 @@ import os
 from config import Config
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
+import cloudinary
+import cloudinary.uploader
+
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=Config.CLOUDINARY_CLOUD_NAME,
+    api_key=Config.CLOUDINARY_API_KEY,
+    api_secret=Config.CLOUDINARY_API_SECRET
+)
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -151,29 +160,20 @@ def update_profile():
     if about_text: update_data['about'] = about_text
     
     # Handle Photo Upload
-    if request.form.get('cropped_image'):
-        import base64
-        from datetime import datetime
-        
-        # Extract base64 data
-        img_data = request.form.get('cropped_image').split(',')[1]
-        filename = f"profile_{int(datetime.now().timestamp())}.jpg"
-        filepath = os.path.join(Config.UPLOAD_FOLDER, filename)
-        
-        with open(filepath, "wb") as fh:
-            fh.write(base64.b64decode(img_data))
-        
-        update_data['image_path'] = filename
-    elif 'photo' in request.files:
-        file = request.files['photo']
-        if file and file.filename != '':
-            from datetime import datetime
-            ext = os.path.splitext(file.filename)[1]
-            if not ext:
-                ext = '.jpg'
-            filename = secure_filename(f"profile_{int(datetime.now().timestamp())}{ext}")
-            file.save(os.path.join(Config.UPLOAD_FOLDER, filename))
-            update_data['image_path'] = filename
+    try:
+        if request.form.get('cropped_image'):
+            # Upload base64 cropped image to Cloudinary
+            result = cloudinary.uploader.upload(request.form.get('cropped_image'), folder="portfolio/profile")
+            update_data['image_url'] = result.get('secure_url')
+        elif 'photo' in request.files:
+            file = request.files['photo']
+            if file and file.filename != '':
+                # Upload raw file directly to Cloudinary
+                result = cloudinary.uploader.upload(file, folder="portfolio/profile")
+                update_data['image_url'] = result.get('secure_url')
+    except Exception as e:
+        flash(f'Error uploading image: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
             
     db.profile.update_one({}, {'$set': update_data}, upsert=True)
     flash('Profile updated successfully!', 'success')
@@ -234,10 +234,12 @@ def add_cert():
     if 'cert_file' in request.files:
         file = request.files['cert_file']
         if file and file.filename != '':
-            from datetime import datetime
-            filename = secure_filename(f"cert_{int(datetime.now().timestamp())}_{file.filename}")
-            file.save(os.path.join(Config.UPLOAD_FOLDER, filename))
-            cert_data['file_path'] = filename
+            try:
+                result = cloudinary.uploader.upload(file, folder="portfolio/certs")
+                cert_data['file_url'] = result.get('secure_url')
+            except Exception as e:
+                flash(f'Error uploading certificate: {str(e)}', 'error')
+                return redirect(url_for('admin.dashboard'))
             
     db.certifications.insert_one(cert_data)
     flash('Certification added!', 'success')
@@ -259,9 +261,12 @@ def update_cert(id):
     if 'cert_file' in request.files:
         file = request.files['cert_file']
         if file and file.filename != '':
-            filename = secure_filename(f"cert_{int(os.times()[4])}_{file.filename}")
-            file.save(os.path.join(Config.UPLOAD_FOLDER, filename))
-            update_data['file_path'] = filename
+            try:
+                result = cloudinary.uploader.upload(file, folder="portfolio/certs")
+                update_data['file_url'] = result.get('secure_url')
+            except Exception as e:
+                flash(f'Error uploading certificate: {str(e)}', 'error')
+                return redirect(url_for('admin.dashboard'))
             
     db.certifications.update_one({'_id': ObjectId(id)}, {'$set': update_data})
     flash('Certification updated!', 'success')

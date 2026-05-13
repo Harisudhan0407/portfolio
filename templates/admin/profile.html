@@ -60,8 +60,9 @@
                         <!-- Current Photo -->
                         <div style="text-align: center;">
                             <div style="width: 200px; height: 260px; background: #1e293b; border-radius: 15px; overflow: hidden; margin-bottom: 20px;">
-                                {% if profile and profile.image_path %}
-                                    <img src="{{ url_for('static', filename='uploads/' + profile.image_path) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% if profile and (profile.image_url or profile.image_base64 or profile.image_path) %}
+                                    {% set img_src = profile.image_url if profile.image_url else (profile.image_base64 if profile.image_base64 else url_for('static', filename='uploads/' + profile.image_path)) %}
+                                    <img src="{{ img_src }}" style="width: 100%; height: 100%; object-fit: cover;">
                                 {% else %}
                                     <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-dim);">
                                         <i class="fas fa-user" style="font-size: 4rem;"></i>

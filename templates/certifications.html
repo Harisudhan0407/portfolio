@@ -37,10 +37,11 @@
                     </div>
 
                     <!-- Action -->
-                    <a href="{{ url_for('static', filename='uploads/' + cert.file_path) if cert.file_path else '#' }}" 
-                       target="_blank" 
-                       style="text-decoration: none; color: var(--accent-gold); font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 8px; opacity: {{ 1 if cert.file_path else 0.4 }}; pointer-events: {{ 'auto' if cert.file_path else 'none' }};">
-                        Verify Certificate <i class="fas fa-external-link-alt" style="font-size: 0.75rem;"></i>
+                    {% set has_file = cert.file_url or cert.file_base64 or cert.file_path %}
+                    {% set file_href = cert.file_url if cert.file_url else (cert.file_base64 if cert.file_base64 else (url_for('static', filename='uploads/' + cert.file_path) if cert.file_path else '#')) %}
+                    <a href="{{ file_href }}" target="_blank"
+                       style="text-decoration: none; color: var(--accent-gold); font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 8px; opacity: {{ 1 if has_file else 0.4 }}; pointer-events: {{ 'auto' if has_file else 'none' }};">
+                        <i class="fas fa-external-link-alt"></i> View Certificate
                     </a>
                 </div>
                 {% endfor %}
