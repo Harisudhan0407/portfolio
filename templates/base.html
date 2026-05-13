@@ -17,7 +17,11 @@
 
     <!-- Navbar -->
     <nav id="navbar">
-        <div class="logo"><a href="{{ url_for('admin.login') }}" style="text-decoration: none; color: #facc15; display: flex; align-items: center; gap: 10px;"><i class="fas fa-shield-alt"></i>Admin</a></div>
+        <div class="logo">
+            {% if request.endpoint == 'main.index' %}
+            <a href="{{ url_for('admin.login') }}" style="text-decoration: none; color: var(--accent-blue); display: flex; align-items: center; gap: 10px;"><i class="fas fa-shield-alt"></i>Admin</a>
+            {% endif %}
+        </div>
         <ul class="nav-links">
             <li><a href="{{ url_for('main.index') }}" class="{{ 'active' if request.endpoint == 'main.index' else '' }}">Home</a></li>
             <li><a href="{{ url_for('main.about') }}" class="{{ 'active' if request.endpoint == 'main.about' else '' }}">About</a></li>
