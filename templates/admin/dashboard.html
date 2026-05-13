@@ -547,14 +547,6 @@
                         <label class="label">Description *</label>
                         <textarea id="editProjectDesc" name="description" class="input-field" rows="3" required></textarea>
                     </div>
-                    <div>
-                        <label class="label">GitHub</label>
-                        <input type="url" id="editProjectGithub" name="github" class="input-field">
-                    </div>
-                    <div>
-                        <label class="label">Live Demo</label>
-                        <input type="url" id="editProjectLive" name="live_demo" class="input-field">
-                    </div>
                 </div>
                 <button type="submit" class="btn-add" style="width: 100%;">Update Project</button>
             </form>
@@ -610,8 +602,6 @@
                     document.getElementById('editProjectTitle').value = d.title;
                     document.getElementById('editProjectTags').value = d.tags;
                     document.getElementById('editProjectDesc').value = d.description;
-                    document.getElementById('editProjectGithub').value = d.github;
-                    document.getElementById('editProjectLive').value = d.live;
                     modal.style.display = 'flex';
                 };
             });
@@ -679,11 +669,22 @@
             if (!cropper) return;
             
             const canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500
+                maxWidth: 1920,
+                maxHeight: 1920
             });
+
+            if (!canvas) {
+                alert('Could not process the image. Please try a different photo.');
+                return;
+            }
             
-            croppedInput.value = canvas.toDataURL('image/jpeg', 0.6);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+            if (dataUrl.length < 100) {
+                alert('Image processing failed. The photo might be too large for this device.');
+                return;
+            }
+
+            croppedInput.value = dataUrl;
             alert('Crop applied! You can now click "Save Profile" to update.');
             
             closeModal('cropModal');

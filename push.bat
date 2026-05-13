@@ -1,0 +1,9 @@
+@echo off
+echo Adding changes...
+git add .
+echo Committing changes...
+git commit -m "Cleanup unused fields and fix image upload"
+echo Pushing to GitHub...
+git push
+echo Done!
+pause

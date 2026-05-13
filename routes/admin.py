@@ -95,16 +95,10 @@ def add_project():
     title = request.form.get('title')
     description = request.form.get('description')
     tags = request.form.get('tags').split(',')
-    github = request.form.get('github')
-    live_demo = request.form.get('live_demo')
-    
     db.projects.insert_one({
         'title': title,
         'description': description,
-        'tags': [t.strip() for t in tags],
-        'github': github,
-        'live_demo': live_demo,
-        'image': None
+        'tags': [t.strip() for t in tags]
     })
     flash('Project added successfully!', 'success')
     return redirect(url_for('admin.dashboard'))
@@ -115,15 +109,10 @@ def update_project(id):
     title = request.form.get('title')
     description = request.form.get('description')
     tags = request.form.get('tags').split(',')
-    github = request.form.get('github')
-    live_demo = request.form.get('live_demo')
-    
     db.projects.update_one({'_id': ObjectId(id)}, {'$set': {
         'title': title,
         'description': description,
-        'tags': [t.strip() for t in tags],
-        'github': github,
-        'live_demo': live_demo
+        'tags': [t.strip() for t in tags]
     }})
     flash('Project updated!', 'success')
     return redirect(url_for('admin.dashboard'))
@@ -178,7 +167,11 @@ def update_profile():
     elif 'photo' in request.files:
         file = request.files['photo']
         if file and file.filename != '':
-            filename = secure_filename(file.filename)
+            from datetime import datetime
+            ext = os.path.splitext(file.filename)[1]
+            if not ext:
+                ext = '.jpg'
+            filename = secure_filename(f"profile_{int(datetime.now().timestamp())}{ext}")
             file.save(os.path.join(Config.UPLOAD_FOLDER, filename))
             update_data['image_path'] = filename
             
