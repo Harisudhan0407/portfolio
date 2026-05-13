@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+  </defs>
+  <!-- Glow Hexagon Background -->
+  <path d="M32 4 L58 18 L58 46 L32 60 L6 46 L6 18 Z" fill="url(#grad)" />
+  <!-- Inner Hexagon (Dark Theme Match) -->
+  <path d="M32 8 L54 20 L54 44 L32 56 L10 44 L10 20 Z" fill="#0f172a" />
+  <!-- Stylized Letter H for Harisudhan -->
+  <path d="M22 22 L28 22 L28 29 L36 29 L36 22 L42 22 L42 42 L36 42 L36 35 L28 35 L28 42 L22 42 Z" fill="url(#grad)" />
+</svg>
