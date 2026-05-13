@@ -45,6 +45,12 @@ def certifications():
     certs = list(db.certifications.find())
     return render_template('certifications.html', certs=certs)
 
+@main_bp.route('/experience')
+def experience():
+    internships = list(db.internships.find())
+    hackathons = list(db.hackathons.find())
+    return render_template('experience.html', internships=internships, hackathons=hackathons)
+
 @main_bp.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
