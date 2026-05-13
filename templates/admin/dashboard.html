@@ -12,74 +12,67 @@
         :root { --accent-yellow: #60a5fa; --bg-dark: #0f172a; --accent-gold: #60a5fa; --glass-border: rgba(255,255,255,0.1); }
         body { background: var(--bg-dark); color: #fff; margin: 0; }
         
-        .dashboard-container { max-width: 1400px; margin: 0 auto; padding: 40px 40px; }
+        .dashboard-wrapper { display: flex; min-height: 100vh; flex-direction: row; }
         
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; position: relative; z-index: 10; }
-        .logo-area { display: flex; align-items: center; gap: 20px; }
-        .logo-icon { font-size: 2.5rem; color: var(--accent-gold); }
-        
-        .tab-logout { background: none; border: none; color: #f87171; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 15px 0; position: relative; opacity: 0.8; font-weight: 600; text-decoration: none; white-space: nowrap; }
-        .tab-logout:hover { opacity: 1; transform: translateY(-2px); }
-
-        .welcome-box { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 25px; border-radius: 12px; margin-bottom: 60px; color: #34d399; position: relative; z-index: 5; }
-
-        .stats-grid { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; }
-        .stat-card { background: #0f172a; border: 1px solid rgba(255,255,255,0.1); padding: 30px 15px; border-radius: 10px; text-align: center; min-width: 280px; flex: 1; max-width: 330px; }
-        .stat-value { font-size: 2.8rem; color: var(--accent-gold); font-weight: 700; margin-bottom: 5px; }
-        .stat-label { color: #fff; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; }
-
-        /* Perfect Horizontal Navigation */
-        .tabs-nav {
+        /* Desktop Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: rgba(15, 23, 42, 0.95);
+            border-right: 1px solid var(--glass-border);
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 40px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 40px;
-            padding: 10px 5px;
+            flex-direction: column;
+            padding: 30px 20px;
             position: sticky;
             top: 0;
-            background: var(--bg-dark);
+            height: 100vh;
+            box-sizing: border-box;
             z-index: 1000;
+            backdrop-filter: blur(10px);
         }
+        .logo-area { display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
+        .logo-icon { font-size: 2rem; color: var(--accent-gold); }
         
+        .sidebar-nav { display: flex; flex-direction: column; gap: 10px; flex: 1; overflow-y: auto; overflow-x: hidden; padding-right: 5px; }
+        
+        /* Desktop Buttons */
         .tab-btn {
-            background: none;
+            background: transparent;
             border: none;
-            color: #fff;
-            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 15px 0;
-            position: relative;
-            opacity: 0.8;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        .tab-btn.active {
-            opacity: 1;
-            color: var(--accent-gold);
-        }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
+            gap: 15px;
+            transition: all 0.3s ease;
+            text-align: left;
             width: 100%;
-            height: 2px;
-            background: var(--accent-gold);
+            text-decoration: none;
+            box-sizing: border-box;
         }
+        .tab-btn i { font-size: 1.2rem; width: 25px; text-align: center; transition: transform 0.3s ease; }
+        .tab-btn:hover { background: rgba(255, 255, 255, 0.05); color: #fff; transform: translateX(5px); }
+        .tab-btn.active { background: rgba(96, 165, 250, 0.1); color: var(--accent-gold); border-left: 4px solid var(--accent-gold); border-radius: 0 12px 12px 0; }
+        .tab-btn.active i { transform: scale(1.1); }
         
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
-        
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; position: relative; z-index: 10; }
-        .logo-area { display: flex; align-items: center; gap: 20px; }
-        .logo-icon { font-size: 2.5rem; color: var(--accent-gold); }
-        .btn-logout { border: 1px solid rgba(248, 113, 113, 0.5); color: #f87171; padding: 12px 25px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; transition: 0.3s; font-weight: 600; width: 100%; box-sizing: border-box; }
-        .btn-logout:hover { background: rgba(248, 113, 113, 0.1); border-color: #f87171; transform: translateY(-2px); }
+        .tab-logout {
+            background: transparent; border: none; color: #f87171; padding: 15px 20px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; text-align: left; width: 100%; text-decoration: none; box-sizing: border-box; margin-top: auto;
+        }
+        .tab-logout:hover { background: rgba(248, 113, 113, 0.1); transform: translateX(5px); }
+        .tab-logout i { font-size: 1.2rem; width: 25px; text-align: center; transition: transform 0.3s ease; }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            max-width: calc(100vw - 280px);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
 
         .welcome-box { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 25px; border-radius: 12px; margin-bottom: 60px; color: #34d399; position: relative; z-index: 5; }
 
@@ -87,8 +80,6 @@
         .stat-card { background: #0f172a; border: 1px solid rgba(255,255,255,0.1); padding: 30px 15px; border-radius: 10px; text-align: center; min-width: 280px; flex: 1; max-width: 330px; }
         .stat-value { font-size: 2.8rem; color: var(--accent-gold); font-weight: 700; margin-bottom: 5px; }
         .stat-label { color: #fff; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; }
-
-        /* Removed old top tabs styles */
 
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
@@ -114,17 +105,51 @@
 
         /* Mobile Breakpoints */
         @media (max-width: 900px) {
-            .dashboard-container { padding: 20px; }
-            .header { flex-direction: column; gap: 15px; margin-bottom: 30px; text-align: center; }
+            .dashboard-wrapper { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px 10px;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+            .logo-area { justify-content: center; margin-bottom: 20px; padding-bottom: 20px; }
             
-            .tabs-nav {
+            /* Top Horizontal Nav for Mobile */
+            .sidebar-nav {
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
-                padding: 15px 5px;
-                gap: 15px;
-                position: static; /* Un-stick on mobile */
-                border-bottom: 1px solid rgba(255,255,255,0.1);
+                gap: 10px;
+                padding-right: 0;
+            }
+            .tab-btn, .tab-logout {
+                width: auto;
+                padding: 10px 15px;
+                border-radius: 8px;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 0.85rem;
+                flex: 0 1 auto;
+                text-align: center;
+            }
+            .tab-btn i, .tab-logout i { width: auto; margin-right: 5px; }
+            .tab-btn:hover, .tab-logout:hover { transform: translateY(-2px); }
+            
+            .tab-btn.active {
+                border-left: 1px solid rgba(255, 255, 255, 0.1); /* override desktop left border */
+                border-bottom: 2px solid var(--accent-gold);
+                background: rgba(96, 165, 250, 0.15);
+                border-radius: 8px;
+            }
+            
+            .tab-logout { margin-top: 0; }
+
+            .main-content {
+                max-width: 100vw;
+                padding: 20px;
             }
             
             .stats-grid { grid-template-columns: 1fr !important; }
@@ -133,48 +158,48 @@
                 grid-template-columns: 1fr !important;
             }
         }
-
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Header -->
-        <header class="header">
+    <div class="dashboard-wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
             <div class="logo-area">
                 <i class="fas fa-tachometer-alt logo-icon"></i>
                 <div>
-                    <h1 class="royal-text" style="font-size: 1.8rem; color: var(--accent-gold); margin: 0;">Admin Dashboard</h1>
-                    <p style="margin: 5px 0 0; color: #fff; opacity: 0.6; font-size: 0.9rem;">Portfolio Manager</p>
+                    <h1 class="royal-text" style="font-size: 1.5rem; color: var(--accent-gold); margin: 0;">Admin</h1>
+                    <p style="margin: 0; color: #fff; opacity: 0.6; font-size: 0.8rem;">Manager</p>
                 </div>
             </div>
-        </header>
+            
+            <nav class="sidebar-nav">
+                <button class="tab-btn" onclick="showTab('skills')"><i class="fas fa-code"></i> Skills</button>
+                <button class="tab-btn" onclick="showTab('certs')"><i class="fas fa-certificate"></i> Certificates</button>
+                <button class="tab-btn" onclick="showTab('projects')"><i class="fas fa-folder"></i> Projects</button>
+                <button class="tab-btn active" onclick="showTab('profile')"><i class="fas fa-user-circle"></i> About</button>
+                <a href="{{ url_for('admin.logout') }}" class="tab-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </aside>
 
-        <!-- Stats Grid -->
-        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
-            <div class="stat-card">
-                <div class="stat-value">{{ stats.skills }}</div>
-                <div class="stat-label"><i class="fas fa-code"></i> Skills</div>
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Stats Grid -->
+            <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="stat-card">
+                    <div class="stat-value">{{ stats.skills }}</div>
+                    <div class="stat-label"><i class="fas fa-code"></i> Skills</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ stats.certs }}</div>
+                    <div class="stat-label"><i class="fas fa-certificate"></i> Certificates</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ stats.projects }}</div>
+                    <div class="stat-label"><i class="fas fa-folder"></i> Projects</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value">{{ stats.certs }}</div>
-                <div class="stat-label"><i class="fas fa-certificate"></i> Certificates</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">{{ stats.projects }}</div>
-                <div class="stat-label"><i class="fas fa-folder"></i> Projects</div>
-            </div>
-        </div>
-
-        <!-- Horizontal Navigation Bar -->
-        <nav class="tabs-nav">
-            <button class="tab-btn" onclick="showTab('skills')"><i class="fas fa-code"></i> Skills</button>
-            <button class="tab-btn" onclick="showTab('certs')"><i class="fas fa-certificate"></i> Certificates</button>
-            <button class="tab-btn" onclick="showTab('projects')"><i class="fas fa-folder"></i> Projects</button>
-            <button class="tab-btn active" onclick="showTab('profile')"><i class="fas fa-user-circle"></i> About</button>
-            <a href="{{ url_for('admin.logout') }}" class="tab-logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </nav>
 
             <!-- About (Profile) Tab -->
         <div id="profile" class="tab-content active">
@@ -821,5 +846,7 @@
             cropper = null;
         }
     </script>
+</main>
+</div>
 </body>
 </html>
