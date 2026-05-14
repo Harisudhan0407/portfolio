@@ -37,8 +37,7 @@ def login():
 @admin_bp.route('/logout')
 def logout():
     session.pop('admin_logged_in', None)
-    flash('Thank You', 'success')
-    return redirect(url_for('admin.login'))
+    return redirect(url_for('main.index'))
 
 @admin_bp.route('/dashboard')
 def dashboard():
