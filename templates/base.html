@@ -12,6 +12,107 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+    <!-- Page Preloader -->
+    <div id="page-preloader">
+        <div class="preloader-inner">
+            <div class="preloader-logo-ring"></div>
+            <div class="preloader-logo">
+                <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="preload-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#3b82f6" />
+                            <stop offset="100%" stop-color="#a855f7" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M32 4 L58 18 L58 46 L32 60 L6 46 L6 18 Z" fill="url(#preload-grad)" />
+                    <path d="M32 8 L54 20 L54 44 L32 56 L10 44 L10 20 Z" fill="#0f172a" />
+                    <path d="M22 22 L28 22 L28 29 L36 29 L36 22 L42 22 L42 42 L36 42 L36 35 L28 35 L28 42 L22 42 Z" fill="url(#preload-grad)" />
+                </svg>
+            </div>
+            <div class="preloader-name">HARISUDHAN K</div>
+            <div class="preloader-dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #page-preloader {
+            position: fixed;
+            inset: 0;
+            background: #0a0f1e;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #page-preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .preloader-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+        .preloader-logo {
+            position: relative;
+            z-index: 2;
+            animation: preloader-pulse 1.2s ease-in-out infinite;
+        }
+        .preloader-logo-ring {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid rgba(59,130,246,0.4);
+            animation: preloader-ring 1.4s ease-in-out infinite;
+            margin-top: -18px;
+            margin-left: -18px;
+        }
+        @keyframes preloader-ring {
+            0%   { transform: scale(0.8); opacity: 0.8; }
+            50%  { transform: scale(1.3); opacity: 0.2; }
+            100% { transform: scale(0.8); opacity: 0.8; }
+        }
+        @keyframes preloader-pulse {
+            0%, 100% { transform: scale(1);   }
+            50%       { transform: scale(1.08); }
+        }
+        .preloader-name {
+            font-family: 'Cinzel', 'Georgia', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #3b82f6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .preloader-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .preloader-dots span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #3b82f6;
+            animation: preloader-bounce 1.2s ease-in-out infinite;
+        }
+        .preloader-dots span:nth-child(2) { animation-delay: 0.2s; background: #7c3aed; }
+        .preloader-dots span:nth-child(3) { animation-delay: 0.4s; background: #a855f7; }
+        @keyframes preloader-bounce {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+            40%            { transform: scale(1);   opacity: 1;   }
+        }
+    </style>
+
+
     <!-- Scroll Progress -->
     <div class="scroll-progress"></div>
 
@@ -48,5 +149,18 @@
 
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Hide preloader after page load (min 1.5s so splash is visible)
+        const preloader = document.getElementById('page-preloader');
+        const hidePreloader = () => {
+            preloader.classList.add('hidden');
+        };
+        const minDelay = new Promise(resolve => setTimeout(resolve, 1500));
+        const pageLoad = new Promise(resolve => {
+            if (document.readyState === 'complete') resolve();
+            else window.addEventListener('load', resolve);
+        });
+        Promise.all([minDelay, pageLoad]).then(hidePreloader);
+    </script>
 </body>
 </html>
