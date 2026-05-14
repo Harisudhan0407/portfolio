@@ -256,10 +256,23 @@
                             <div>
                                 <div style="font-weight: 700; color: var(--accent-gold);">{{ item.role }}</div>
                                 <div style="font-size: 0.85rem; color: var(--text-dim);">{{ item.company }} &bull; {{ item.date }}</div>
+                                {% if item.description %}<div style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 4px;">{{ item.description[:80] }}{% if item.description|length > 80 %}...{% endif %}</div>{% endif %}
                             </div>
-                            <a href="{{ url_for('admin.delete_internship', id=item._id|string) }}" onclick="return confirm('Delete this internship?')" style="color: #f87171; font-size: 0.85rem; text-decoration: none;">
-                                <i class="fas fa-trash"></i> Delete
-                            </a>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <a href="javascript:void(0)"
+                                   class="edit-internship-btn"
+                                   data-id="{{ item._id|string }}"
+                                   data-role="{{ item.role }}"
+                                   data-company="{{ item.company }}"
+                                   data-date="{{ item.date }}"
+                                   data-description="{{ item.description or '' }}"
+                                   style="color: var(--accent-gold); font-size: 0.85rem; text-decoration: none;">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="{{ url_for('admin.delete_internship', id=item._id|string) }}" onclick="return confirm('Delete this internship?')" style="color: #f87171; font-size: 0.85rem; text-decoration: none;">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            </div>
                         </div>
                         {% endfor %}
                     {% else %}
@@ -310,10 +323,24 @@
                             <div>
                                 <div style="font-weight: 700; color: var(--accent-gold);">{{ item.name }}</div>
                                 <div style="font-size: 0.85rem; color: var(--text-dim);">{{ item.organizer }} &bull; {{ item.date }}{% if item.result %} &bull; <span style="color: #a855f7;">{{ item.result }}</span>{% endif %}</div>
+                                {% if item.description %}<div style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 4px;">{{ item.description[:80] }}{% if item.description|length > 80 %}...{% endif %}</div>{% endif %}
                             </div>
-                            <a href="{{ url_for('admin.delete_hackathon', id=item._id|string) }}" onclick="return confirm('Delete this hackathon?')" style="color: #f87171; font-size: 0.85rem; text-decoration: none;">
-                                <i class="fas fa-trash"></i> Delete
-                            </a>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <a href="javascript:void(0)"
+                                   class="edit-hackathon-btn"
+                                   data-id="{{ item._id|string }}"
+                                   data-name="{{ item.name }}"
+                                   data-organizer="{{ item.organizer }}"
+                                   data-date="{{ item.date }}"
+                                   data-result="{{ item.result or '' }}"
+                                   data-description="{{ item.description or '' }}"
+                                   style="color: var(--accent-gold); font-size: 0.85rem; text-decoration: none;">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="{{ url_for('admin.delete_hackathon', id=item._id|string) }}" onclick="return confirm('Delete this hackathon?')" style="color: #f87171; font-size: 0.85rem; text-decoration: none;">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            </div>
                         </div>
                         {% endfor %}
                     {% else %}
@@ -465,17 +492,17 @@
                         <div>
                             <label class="label">Category *</label>
                             <select name="category" class="input-field" required>
+                                <option value="" disabled selected>Select Category</option>
                                 <option value="Web Development">Web Development</option>
                                 <option value="Backend Development">Backend Development</option>
                                 <option value="Database Management">Database Management</option>
                                 <option value="AI & Automation">AI & Automation</option>
                                 <option value="UI/UX Design">UI/UX Design</option>
-                                <option value="Tools & Technologies">Tools & Technologies</option>
                             </select>
                         </div>
                         <div>
-                            <label class="label">Proficiency (0-100)</label>
-                            <input type="number" name="proficiency" class="input-field" value="80" min="0" max="100">
+                            <label class="label">Proficiency (0-100) *</label>
+                            <input type="number" name="proficiency" class="input-field" placeholder="e.g. 80" min="0" max="100" required>
                         </div>
                         <button type="submit" class="btn-add">+ Add Skill</button>
                     </div>
@@ -488,13 +515,10 @@
                     ('Backend Development', 'fas fa-server', 'var(--accent-purple)'),
                     ('Database Management', 'fas fa-database', '#10b981'),
                     ('AI & Automation', 'fas fa-robot', '#f59e0b'),
-                    ('UI/UX Design', 'fas fa-paint-brush', '#ec4899'),
-                    ('Tools & Technologies', 'fas fa-tools', '#3b82f6')
+                    ('UI/UX Design', 'fas fa-paint-brush', '#ec4899')
                 ] %}
                 <div class="stat-card" style="text-align: left; padding: 35px; position: relative;">
-                    <a href="javascript:void(0)" style="position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.3); font-size: 1rem;" title="Update Category Content">
-                        <i class="fas fa-pencil-alt"></i>
-                    </a>
+
                     <div class="form-title" style="color: {{ color }}; margin-bottom: 25px; font-size: 1rem;">
                         <i class="{{ icon }}"></i> {{ cat_name|upper }}
                     </div>
@@ -601,6 +625,14 @@
                         <div>
                             <label class="label">Tags (comma separated)</label>
                             <input type="text" name="tags" class="input-field" placeholder="Flask, MongoDB, JS">
+                        </div>
+                        <div>
+                            <label class="label"><i class="fab fa-github" style="margin-right:5px;"></i>GitHub Repo URL</label>
+                            <input type="url" name="github" class="input-field" placeholder="https://github.com/username/repo">
+                        </div>
+                        <div>
+                            <label class="label"><i class="fas fa-external-link-alt" style="margin-right:5px;"></i>Live Demo URL (optional)</label>
+                            <input type="url" name="live_demo" class="input-field" placeholder="https://yourproject.vercel.app">
                         </div>
                         <div style="grid-column: span 2;">
                             <label class="label">Description *</label>
@@ -774,6 +806,14 @@
                         <label class="label">Tags</label>
                         <input type="text" id="editProjectTags" name="tags" class="input-field">
                     </div>
+                    <div>
+                        <label class="label"><i class="fab fa-github" style="margin-right:5px;"></i>GitHub Repo URL</label>
+                        <input type="url" id="editProjectGithub" name="github" class="input-field" placeholder="https://github.com/username/repo">
+                    </div>
+                    <div>
+                        <label class="label"><i class="fas fa-external-link-alt" style="margin-right:5px;"></i>Live Demo URL (optional)</label>
+                        <input type="url" id="editProjectLive" name="live_demo" class="input-field" placeholder="https://yourproject.vercel.app">
+                    </div>
                     <div style="grid-column: span 2;">
                         <label class="label">Description *</label>
                         <textarea id="editProjectDesc" name="description" class="input-field" rows="3" required></textarea>
@@ -784,10 +824,84 @@
         </div>
     </div>
 
+    <!-- Edit Internship Modal -->
+    <div id="editInternshipModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="form-title" style="justify-content: space-between;">
+                <span><i class="fas fa-edit"></i> Edit Internship</span>
+                <i class="fas fa-times" onclick="closeModal('editInternshipModal')" style="cursor: pointer; color: #fff;"></i>
+            </div>
+            <form id="editInternshipForm" method="POST" enctype="multipart/form-data">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label class="label">Role / Position *</label>
+                        <input type="text" id="editInternshipRole" name="role" class="input-field" required>
+                    </div>
+                    <div>
+                        <label class="label">Company / Organization *</label>
+                        <input type="text" id="editInternshipCompany" name="company" class="input-field" required>
+                    </div>
+                    <div>
+                        <label class="label">Duration / Date *</label>
+                        <input type="text" id="editInternshipDate" name="date" class="input-field" required>
+                    </div>
+                    <div>
+                        <label class="label">Replace Certificate (optional)</label>
+                        <input type="file" name="certificate" class="input-field" accept="image/*,.pdf">
+                    </div>
+                    <div style="grid-column: span 2;">
+                        <label class="label">Description</label>
+                        <textarea id="editInternshipDesc" name="description" class="input-field" rows="3"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-add" style="width: 100%;"><i class="fas fa-save"></i> Update Internship</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Hackathon Modal -->
+    <div id="editHackathonModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="form-title" style="justify-content: space-between;">
+                <span><i class="fas fa-edit"></i> Edit Hackathon</span>
+                <i class="fas fa-times" onclick="closeModal('editHackathonModal')" style="cursor: pointer; color: #fff;"></i>
+            </div>
+            <form id="editHackathonForm" method="POST" enctype="multipart/form-data">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label class="label">Hackathon Name *</label>
+                        <input type="text" id="editHackathonName" name="name" class="input-field" required>
+                    </div>
+                    <div>
+                        <label class="label">Organizer *</label>
+                        <input type="text" id="editHackathonOrganizer" name="organizer" class="input-field" required>
+                    </div>
+                    <div>
+                        <label class="label">Date *</label>
+                        <input type="text" id="editHackathonDate" name="date" class="input-field" required>
+                    </div>
+                    <div>
+                        <label class="label">Result / Achievement</label>
+                        <input type="text" id="editHackathonResult" name="result" class="input-field" placeholder="e.g. Finalist, Winner">
+                    </div>
+                    <div>
+                        <label class="label">Replace Certificate (optional)</label>
+                        <input type="file" name="certificate" class="input-field" accept="image/*,.pdf">
+                    </div>
+                    <div>
+                        <label class="label">Description</label>
+                        <textarea id="editHackathonDesc" name="description" class="input-field" rows="2"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-add" style="width: 100%;"><i class="fas fa-save"></i> Update Hackathon</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Loading Overlay -->
     <div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
         <i class="fas fa-spinner fa-spin" style="font-size: 4rem; color: var(--accent-gold); margin-bottom: 20px;"></i>
-        <h2 style="color: #fff; margin: 0;">Saving Image...</h2>
+        <h2 id="loading-text" style="color: #fff; margin: 0;">Saving...</h2>
         <p style="color: var(--text-dim); margin-top: 5px;">Please do not refresh the page.</p>
     </div>
 
@@ -795,6 +909,18 @@
         // Form Submission Loader
         document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', function() {
+                let loadingText = "Saving...";
+                const action = this.getAttribute('action') || "";
+                
+                if (action.includes('/skills')) loadingText = "Saving Skills...";
+                else if (action.includes('/certs')) loadingText = "Saving Certificates...";
+                else if (action.includes('/projects')) loadingText = "Saving Project...";
+                else if (action.includes('/profile')) loadingText = "Saving Profile...";
+                else if (action.includes('/hackathons')) loadingText = "Saving Hackathon...";
+                else if (action.includes('/internships')) loadingText = "Saving Internship...";
+                else if (action.includes('/education')) loadingText = "Saving Education...";
+
+                document.getElementById('loading-text').innerText = loadingText;
                 document.getElementById('loading-overlay').style.display = 'flex';
             });
         });
@@ -880,6 +1006,8 @@
                     document.getElementById('editProjectTitle').value = d.title;
                     document.getElementById('editProjectTags').value = d.tags;
                     document.getElementById('editProjectDesc').value = d.description;
+                    document.getElementById('editProjectGithub').value = d.github || '';
+                    document.getElementById('editProjectLive').value = d.live || '';
                     modal.style.display = 'flex';
                 };
             });
@@ -894,6 +1022,35 @@
                     document.getElementById('editEduInstitution').value = d.institution;
                     document.getElementById('editEduDate').value = d.date;
                     document.getElementById('editEduScore').value = d.score;
+                    modal.style.display = 'flex';
+                };
+            });
+
+            // Internships
+            document.querySelectorAll('.edit-internship-btn').forEach(btn => {
+                btn.onclick = function() {
+                    const d = this.dataset;
+                    const modal = document.getElementById('editInternshipModal');
+                    document.getElementById('editInternshipForm').action = `/admin/internships/update/${d.id}`;
+                    document.getElementById('editInternshipRole').value = d.role;
+                    document.getElementById('editInternshipCompany').value = d.company;
+                    document.getElementById('editInternshipDate').value = d.date;
+                    document.getElementById('editInternshipDesc').value = d.description || '';
+                    modal.style.display = 'flex';
+                };
+            });
+
+            // Hackathons
+            document.querySelectorAll('.edit-hackathon-btn').forEach(btn => {
+                btn.onclick = function() {
+                    const d = this.dataset;
+                    const modal = document.getElementById('editHackathonModal');
+                    document.getElementById('editHackathonForm').action = `/admin/hackathons/update/${d.id}`;
+                    document.getElementById('editHackathonName').value = d.name;
+                    document.getElementById('editHackathonOrganizer').value = d.organizer;
+                    document.getElementById('editHackathonDate').value = d.date;
+                    document.getElementById('editHackathonResult').value = d.result || '';
+                    document.getElementById('editHackathonDesc').value = d.description || '';
                     modal.style.display = 'flex';
                 };
             });

@@ -37,7 +37,8 @@ def login():
 @admin_bp.route('/logout')
 def logout():
     session.pop('admin_logged_in', None)
-    return redirect(url_for('main.index'))
+    flash('Thank You', 'success')
+    return redirect(url_for('admin.login'))
 
 @admin_bp.route('/dashboard')
 def dashboard():
@@ -110,12 +111,18 @@ def add_project():
     title = request.form.get('title')
     description = request.form.get('description')
     tags = request.form.get('tags').split(',')
-    db.projects.insert_one({
+    github = request.form.get('github', '').strip()
+    live_demo = request.form.get('live_demo', '').strip()
+    project_data = {
         'title': title,
         'description': description,
         'tags': [t.strip() for t in tags]
-    })
-    flash('Project added successfully!', 'success')
+    }
+    if github:
+        project_data['github'] = github
+    if live_demo:
+        project_data['live_demo'] = live_demo
+    db.projects.insert_one(project_data)
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/projects/update/<id>', methods=['POST'])
@@ -124,19 +131,22 @@ def update_project(id):
     title = request.form.get('title')
     description = request.form.get('description')
     tags = request.form.get('tags').split(',')
-    db.projects.update_one({'_id': ObjectId(id)}, {'$set': {
+    github = request.form.get('github', '').strip()
+    live_demo = request.form.get('live_demo', '').strip()
+    update_data = {
         'title': title,
         'description': description,
-        'tags': [t.strip() for t in tags]
-    }})
-    flash('Project updated!', 'success')
+        'tags': [t.strip() for t in tags],
+        'github': github,
+        'live_demo': live_demo
+    }
+    db.projects.update_one({'_id': ObjectId(id)}, {'$set': update_data})
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/projects/delete/<id>')
 def delete_project(id):
     if not is_logged_in(): return redirect(url_for('admin.login'))
     db.projects.delete_one({'_id': ObjectId(id)})
-    flash('Project deleted', 'info')
     return redirect(url_for('admin.dashboard'))
 
 # Messages
@@ -189,7 +199,6 @@ def update_profile():
         return redirect(url_for('admin.dashboard'))
             
     db.profile.update_one({}, {'$set': update_data}, upsert=True)
-    flash('Profile updated successfully!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 # Skills Management
@@ -205,14 +214,12 @@ def add_skill():
         'category': category,
         'proficiency': int(proficiency)
     })
-    flash('Skill added!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/skills/delete/<id>')
 def delete_skill(id):
     if not is_logged_in(): return redirect(url_for('admin.login'))
     db.skills.delete_one({'_id': ObjectId(id)})
-    flash('Skill removed', 'info')
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/skills/update/<id>', methods=['POST'])
@@ -227,7 +234,6 @@ def update_skill(id):
         'category': category,
         'proficiency': int(proficiency)
     }})
-    flash('Skill updated!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 # Certifications Management
@@ -258,7 +264,6 @@ def add_cert():
                 return redirect(url_for('admin.dashboard'))
             
     db.certifications.insert_one(cert_data)
-    flash('Certification added!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/certs/update/<id>', methods=['POST'])
@@ -288,14 +293,12 @@ def update_cert(id):
                 return redirect(url_for('admin.dashboard'))
             
     db.certifications.update_one({'_id': ObjectId(id)}, {'$set': update_data})
-    flash('Certification updated!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/certs/delete/<id>')
 def delete_cert(id):
     if not is_logged_in(): return redirect(url_for('admin.login'))
     db.certifications.delete_one({'_id': ObjectId(id)})
-    flash('Certification removed', 'info')
     return redirect(url_for('admin.dashboard'))
 
 # Education Management
@@ -311,7 +314,6 @@ def add_education():
         'timestamp': int(datetime.now().timestamp())
     }
     db.education.insert_one(new_edu)
-    flash('Education added!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/education/update/<id>', methods=['POST'])
@@ -328,14 +330,12 @@ def update_education(id):
         'date': date,
         'score': score
     }})
-    flash('Education updated!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/education/delete/<id>')
 def delete_education(id):
     if not is_logged_in(): return redirect(url_for('admin.login'))
     db.education.delete_one({'_id': ObjectId(id)})
-    flash('Education removed', 'info')
     return redirect(url_for('admin.dashboard'))
 
 # Internship Management
@@ -357,14 +357,32 @@ def add_internship():
             file.save(os.path.join(upload_dir, filename))
             data['certificate_path'] = filename
     db.internships.insert_one(data)
-    flash('Internship added!', 'success')
+    return redirect(url_for('admin.dashboard'))
+
+@admin_bp.route('/internships/update/<id>', methods=['POST'])
+def update_internship(id):
+    if not is_logged_in(): return redirect(url_for('admin.login'))
+    update_data = {
+        'role': request.form.get('role'),
+        'company': request.form.get('company'),
+        'date': request.form.get('date'),
+        'description': request.form.get('description', '')
+    }
+    if 'certificate' in request.files:
+        file = request.files['certificate']
+        if file and file.filename != '':
+            filename = secure_filename(file.filename)
+            upload_dir = os.path.join('static', 'uploads')
+            os.makedirs(upload_dir, exist_ok=True)
+            file.save(os.path.join(upload_dir, filename))
+            update_data['certificate_path'] = filename
+    db.internships.update_one({'_id': ObjectId(id)}, {'$set': update_data})
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/internships/delete/<id>')
 def delete_internship(id):
     if not is_logged_in(): return redirect(url_for('admin.login'))
     db.internships.delete_one({'_id': ObjectId(id)})
-    flash('Internship removed', 'info')
     return redirect(url_for('admin.dashboard'))
 
 # Hackathon Management
@@ -387,13 +405,32 @@ def add_hackathon():
             file.save(os.path.join(upload_dir, filename))
             data['certificate_path'] = filename
     db.hackathons.insert_one(data)
-    flash('Hackathon added!', 'success')
+    return redirect(url_for('admin.dashboard'))
+
+@admin_bp.route('/hackathons/update/<id>', methods=['POST'])
+def update_hackathon(id):
+    if not is_logged_in(): return redirect(url_for('admin.login'))
+    update_data = {
+        'name': request.form.get('name'),
+        'organizer': request.form.get('organizer'),
+        'date': request.form.get('date'),
+        'result': request.form.get('result', ''),
+        'description': request.form.get('description', '')
+    }
+    if 'certificate' in request.files:
+        file = request.files['certificate']
+        if file and file.filename != '':
+            filename = secure_filename(file.filename)
+            upload_dir = os.path.join('static', 'uploads')
+            os.makedirs(upload_dir, exist_ok=True)
+            file.save(os.path.join(upload_dir, filename))
+            update_data['certificate_path'] = filename
+    db.hackathons.update_one({'_id': ObjectId(id)}, {'$set': update_data})
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/hackathons/delete/<id>')
 def delete_hackathon(id):
     if not is_logged_in(): return redirect(url_for('admin.login'))
     db.hackathons.delete_one({'_id': ObjectId(id)})
-    flash('Hackathon removed', 'info')
     return redirect(url_for('admin.dashboard'))
 

@@ -37,38 +37,38 @@
             </div>
 
             {% if internships %}
-            <div style="display: grid; gap: 25px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px;">
                 {% for item in internships %}
-                <div class="glass" style="padding: 30px; border-radius: 18px; border: 1px solid var(--glass-border); display: flex; gap: 25px; align-items: flex-start; transition: var(--transition-smooth);"
-                     onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'; this.style.transform='translateY(-3px)';"
+                <div class="glass" style="padding: 28px; border-radius: 18px; border: 1px solid var(--glass-border); transition: var(--transition-smooth);"
+                     onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'; this.style.transform='translateY(-4px)';"
                      onmouseout="this.style.borderColor='var(--glass-border)'; this.style.transform='translateY(0)';">
-                    <!-- Icon -->
-                    <div style="flex-shrink: 0; width: 55px; height: 55px; background: rgba(59, 130, 246, 0.15); border-radius: 14px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(59,130,246,0.3);">
-                        <i class="fas fa-building" style="color: var(--accent-blue); font-size: 1.4rem;"></i>
-                    </div>
-                    <!-- Content -->
-                    <div style="flex: 1;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
-                            <h3 style="margin: 0; font-size: 1.15rem; font-family: 'Sora', sans-serif; font-weight: 700;">{{ item.role }}</h3>
-                            <span style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: var(--accent-blue); padding: 4px 12px; border-radius: 50px; font-size: 0.78rem; font-weight: 600; white-space: nowrap;">
-                                <i class="fas fa-calendar-alt"></i> {{ item.date }}
-                            </span>
+                    <!-- Header: Icon + Date Badge -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; gap: 10px;">
+                        <div style="width: 48px; height: 48px; background: rgba(59, 130, 246, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(59,130,246,0.3);">
+                            <i class="fas fa-building" style="color: var(--accent-blue); font-size: 1.2rem;"></i>
                         </div>
-                        <div style="color: var(--accent-blue); font-weight: 600; font-size: 0.9rem; margin-bottom: 10px;">
-                            <i class="fas fa-map-marker-alt"></i> {{ item.company }}
-                        </div>
-                        {% if item.description %}
-                        <p style="color: var(--text-dim); font-size: 0.88rem; margin: 0; line-height: 1.7;">{{ item.description }}</p>
-                        {% endif %}
-                        {% if item.certificate_path or item.certificate_url %}
-                        {% set cert_href = item.certificate_url if item.certificate_url else url_for('static', filename='uploads/' + item.certificate_path) %}
-                        <a href="{{ cert_href }}" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 15px; color: var(--accent-blue); font-size: 0.82rem; font-weight: 600; text-decoration: none; border: 1px solid rgba(59,130,246,0.3); padding: 5px 14px; border-radius: 50px; background: rgba(59,130,246,0.08); transition: var(--transition-smooth);"
-                           onmouseover="this.style.background='rgba(59,130,246,0.2)'"
-                           onmouseout="this.style.background='rgba(59,130,246,0.08)'">
-                            <i class="fas fa-file-certificate"></i> View Certificate
-                        </a>
-                        {% endif %}
+
                     </div>
+                    <!-- Role Title -->
+                    <h3 style="margin: 0 0 8px 0; font-size: 1.05rem; font-family: 'Sora', sans-serif; font-weight: 700; line-height: 1.4;">{{ item.role }}</h3>
+                    <!-- Company -->
+                    <div style="color: var(--accent-blue); font-weight: 600; font-size: 0.85rem; margin-bottom: 6px;">
+                        <i class="fas fa-map-marker-alt"></i> {{ item.company }}
+                    </div>
+                    <div style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 12px;">
+                        <i class="fas fa-calendar-alt"></i> {{ item.date }}
+                    </div>
+                    {% if item.description %}
+                    <p style="color: var(--text-dim); font-size: 0.85rem; margin: 0 0 15px 0; line-height: 1.6;">{{ item.description }}</p>
+                    {% endif %}
+                    {% if item.certificate_path or item.certificate_url %}
+                    {% set cert_href = item.certificate_url if item.certificate_url else url_for('static', filename='uploads/' + item.certificate_path) %}
+                    <a href="{{ cert_href }}" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; color: var(--accent-blue); font-size: 0.82rem; font-weight: 600; text-decoration: none; border: 1px solid rgba(59,130,246,0.3); padding: 5px 14px; border-radius: 50px; background: rgba(59,130,246,0.08); transition: var(--transition-smooth);"
+                       onmouseover="this.style.background='rgba(59,130,246,0.2)'"
+                       onmouseout="this.style.background='rgba(59,130,246,0.08)'">
+                        <i class="fas fa-external-link-alt"></i> View Certificate
+                    </a>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
@@ -79,6 +79,7 @@
             </div>
             {% endif %}
         </div>
+
 
         <!-- Hackathons Section -->
         <div>

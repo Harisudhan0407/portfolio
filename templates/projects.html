@@ -11,9 +11,9 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
             {% if projects %}
                 {% for project in projects %}
-                <div class="glass tilt-card" style="padding: 40px; border-radius: 20px;">
+                <div class="glass tilt-card" style="padding: 40px; border-radius: 20px; display: flex; flex-direction: column;">
                     <h2 class="royal-text" style="color: var(--accent-gold); margin-bottom: 20px; font-size: 1.8rem;">{{ project.title }}</h2>
-                    <p style="color: var(--text-main); line-height: 1.8; margin-bottom: 30px; font-size: 1rem; opacity: 0.9;">{{ project.description }}</p>
+                    <p style="color: var(--text-main); line-height: 1.8; margin-bottom: 30px; font-size: 1rem; opacity: 0.9; flex: 1;">{{ project.description }}</p>
                     
                     <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;">
                         {% for tag in project.tags %}
@@ -21,6 +21,24 @@
                         {% endfor %}
                     </div>
 
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        {% if project.github %}
+                        <a href="{{ project.github }}" target="_blank" rel="noopener noreferrer"
+                           style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #e2e8f0; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease;"
+                           onmouseover="this.style.background='rgba(255,255,255,0.12)';this.style.borderColor='var(--accent-gold)';"
+                           onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.15)';">
+                            <i class="fab fa-github" style="font-size: 1rem;"></i> View on GitHub
+                        </a>
+                        {% endif %}
+                        {% if project.live_demo %}
+                        <a href="{{ project.live_demo }}" target="_blank" rel="noopener noreferrer"
+                           style="display: inline-flex; align-items: center; gap: 8px; background: rgba(96, 165, 250, 0.1); border: 1px solid rgba(96, 165, 250, 0.3); color: #60a5fa; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease;"
+                           onmouseover="this.style.background='rgba(96,165,250,0.2)';"
+                           onmouseout="this.style.background='rgba(96,165,250,0.1)';">
+                            <i class="fas fa-external-link-alt" style="font-size: 0.85rem;"></i> Live Demo
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
                 {% endfor %}
             {% else %}

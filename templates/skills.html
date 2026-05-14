@@ -5,15 +5,14 @@
     <div class="container" style="max-width: 1400px; margin: 0 auto;">
         <h1 class="royal-text" style="text-align: center; margin-bottom: 60px; font-size: 3rem;">My <span style="color: var(--accent-blue);">Expertise</span></h1>
         
-        <div class="skills-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+        <div class="skills-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1150px; margin: 0 auto;">
             
             {% set categories = [
                 ('Web Development', 'fas fa-code'),
                 ('Backend Development', 'fas fa-server'),
                 ('Database Management', 'fas fa-database'),
                 ('AI & Automation', 'fas fa-robot'),
-                ('UI/UX Design', 'fas fa-paint-brush'),
-                ('Tools & Technologies', 'fas fa-tools')
+                ('UI/UX Design', 'fas fa-paint-brush')
             ] %}
 
             {% for cat_name, icon in categories %}
